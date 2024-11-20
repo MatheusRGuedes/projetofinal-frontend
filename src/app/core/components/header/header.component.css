@@ -1,0 +1,39 @@
+.header_section {
+    width: calc(100% - 250px);
+    max-height: 75px;
+    position: relative;
+    left: 250px;
+    padding: 0.8rem 0;
+    font-family: "Roboto", sans-serif;
+    background-color: var(--primary-color);
+    color: #fff;
+    transition: var(--tran-03); /*retirar caso lentidão*/
+}
+
+.container {
+    padding: 0 1rem !important;
+}
+
+.custom_nav-container.navbar-expand-lg {
+    justify-content: flex-end !important;
+}
+
+.custom_nav-container .navbar-content .btn {
+    border: 0;
+}
+
+.btn,
+.btn:focus {
+    outline: none !important;
+    box-shadow: none;
+}
+
+.navbar .navbar-content {
+    display: flex;
+    align-items: center;
+}
+
+.username {
+    margin-right: 50px;
+    font-size: 19px;
+}

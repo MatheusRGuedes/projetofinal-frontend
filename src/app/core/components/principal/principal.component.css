@@ -1,0 +1,7 @@
+section {
+    width: calc(100% - 250px);
+    padding: 1rem;
+    position: relative;
+    left: 250px;
+    transition: var(--tran-03); /*retirar caso lentidão*/
+}

@@ -1,0 +1,91 @@
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background: var(--sidebar-color);
+    transition: var(--tran-03); /*retirar caso lentidão*/
+    white-space: nowrap;
+}
+.sidebar.close {
+    width: 100px;
+}
+.sidebar.close .btn-toggle::before {
+    content: none;
+}
+.sidebar.close .text ,
+.sidebar.close ul li div.collapse {
+    display: none;
+}
+
+.sidebar .logo_box {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    margin: 0 0 1rem 0;
+}
+.sidebar .logo_box a {
+    width: 80px;
+}
+.sidebar .logo_box a img {
+    width: 100%;
+}
+
+.sidebar .list-unstyled li a {
+    display: flex;
+    align-items: center;
+    background-color: transparent;
+    color: var(--text-color);
+}
+.sidebar .list-unstyled li a.link-item {
+    padding: /*0.375rem*/ 1.1rem;
+}
+
+/* Pega os botões com ou sem submenus */
+.sidebar .list-unstyled li a:hover,
+.sidebar .list-unstyled li a:focus {
+    color: rgba(0, 0, 0, .85);
+    background-color: var(--primary-color-light);
+}
+
+.sidebar .list-unstyled li a .text/*,
+.sidebar .list-unstyled li a img*/ {
+    font-size: 16px;
+    margin-left: 10px;
+    transition: var(--tran-01);
+}
+  
+.sidebar .btn-toggle::before {
+    width: 1.25em;
+    line-height: 0;
+    content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+    position: absolute;
+    right: 1rem;
+    transition: transform .35s ease;
+    transform-origin: .5em 50%;
+}
+/* Efeito abrir menu */
+.btn-toggle[aria-expanded="true"]::before {
+    transform: rotate(90deg);
+} 
+  
+.btn-toggle-nav a {
+    display: inline-flex;
+    padding: .1875rem .5rem;
+    margin-top: .125rem;
+    margin-left: 1.25rem;
+    text-decoration: none;
+}
+.btn-toggle-nav a:hover,
+.btn-toggle-nav a:focus {
+    background-color: var(--primary-color-light);
+}
+  
+.scrollarea {
+    overflow-y: auto;
+}
+
+.fw-semibold { font-weight: 600; }
+.lh-tight { line-height: 1.25; }
