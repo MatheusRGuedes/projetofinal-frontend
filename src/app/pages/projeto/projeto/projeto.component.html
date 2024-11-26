@@ -1,0 +1,77 @@
+<div class="container">
+    <div class="border-bottom mb-4">
+        <p class="m-0">Cadastre um Projeto.</p>
+    </div>
+
+    <form [formGroup]="form" novalidate>
+        <div class="d-flex mb-2">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="titulo" placeholder="Título" size="25" formControlName="titulo">
+                <label for="titulo">Título</label>
+                <div *ngIf="campoInvalido('titulo')" class="container-error">
+                    <span *ngIf="titulo.errors!['required']">É obrigatório.</span>
+                </div>
+            </div>
+            <div class="form-floating">
+                <input type="text" class="form-control" id="descricaoProjeto" placeholder="Descrição" size="50" formControlName="descricaoProjeto">
+                <label for="descricaoProjeto">Descricao do Projeto</label>
+                <div *ngIf="campoInvalido('descricaoProjeto')" class="container-error">
+                    <span *ngIf="descricaoProjeto.errors!['required']">É obrigatório.</span>
+                </div>
+            </div>
+        </div>
+            <!-- <div class="form-floating">
+                <select class="form-select" [ngClass]="campoInvalido('sexo') ? 'invalid-field' : ''" id="floatingSexo" aria-label="Sexo" formControlName="sexo">
+                    <option value="">Selecione...</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+                <label for="floatingSexo">Sexo</label>
+                <div *ngIf="campoInvalido('sexo')" class="container-error">
+                    <span *ngIf="sexo.errors!['required']">Campo obrigatório.</span>
+                </div>
+            </div> -->
+            <!-- Etapas -->
+        <div class="etapas" formArrayName="etapas">
+            <div class="alinhar titulo">
+              <div><h2>Etapas</h2></div>
+               <button class="buttonNovo" type="button" (click)="addEtapas()">
+                   <i class="fa-solid fa-plus"></i> Novo
+                </button>
+            </div>
+              
+            <div *ngFor="let etapa of etapas; let i = index" [formGroupName]="i">
+                 <div class="cardContent">
+              
+                    <div class="container">
+                            <!-- <div style="top: 12px; position: relative;">
+                                <button class="checkbox" type="button" (click)="setSelecionado(i, !getSelecionado(i))">
+                                <i class="fa-solid fa-check green" *ngIf="!getSelecionado(i).value"></i>
+                                <i class="fa-solid fa-x red" *ngIf="getSelecionado(i).value"></i>
+                                </button>
+                            </div> -->
+              
+                        <div class="form-group">
+                            <label for="nomeEtapa">Nome Etapa</label>
+                            <input type="text" class="form-control" id="nomeEtapa" placeholder="Etapa" size="25" formControlName="nomeEtapa">
+                            <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
+                                <span *ngIf="getNomeEtapa(i).errors!['required']">É obrigatório.</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="perguntas">Perguntas</label>
+                            <input type="text" class="form-control" id="perguntas" placeholder="Etapa" size="25" formControlName="perguntas">
+                            <div *ngIf="campoInvalido('perguntas')" class="container-error">
+                                    <!-- <span *ngIf="getNomeEtapa(i).errors!['required']">É obrigatório.</span> -->
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <botao-acao styleId="btnSalvar" (executaAcaoEvent)="gravarDados()" style="margin-right: 10px;">
+            Salvar
+        </botao-acao>
+    </form>
+</div>

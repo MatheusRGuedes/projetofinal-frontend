@@ -12,15 +12,15 @@ const routes: Routes = [
   {
     path: '',
     component: PrincipalComponent,
-    canActivate: [] //,
-    // children: [
-    //   {
-        //path: 'funcionarios',
-        //canMatch: [IsAdminGuard], //conteúdo admin
+    canActivate: [],
+    children: [
+      {
+        path: 'projetos',
+        //canMatch: [], //IsAdminGuard
         //canActivateChild: [IsAdminGuard], //acesso admin
-        //loadChildren: () => import('./pages/funcionario/funcionario.module').then(module => module.FuncionarioModule)
-    //   }
-    // ]
+        loadChildren: () => import('./pages/projeto/projeto.module').then(module => module.ProjetoModule)
+      }
+    ]
   },
 
   {

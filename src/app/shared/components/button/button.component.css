@@ -1,0 +1,29 @@
+.botao {
+    position: relative;
+    color: white;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem; /*16px*/
+    border: none;
+    border-radius: 5px;
+}
+
+.btn-primario {
+    background-color: #2a9ce5;
+}
+.btn-primario:hover {
+    background-color: #227cb5;
+}
+
+.btn-deletar {
+    background-color: #dc3545;
+}
+.btn-deletar:hover {
+    background-color: #bd2a38;
+}
+
+.btn-green {
+    background-color: #28a745;
+}
+.btn-green:hover {
+    background-color: #22883a;
+}
