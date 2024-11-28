@@ -23,4 +23,12 @@ export class ProjetoService {
       .post(`${this.PROJETO_URL}/cadastrar`, projeto)
       .pipe(map((response) => 'Projeto gravado com sucesso.'));
   }
+
+  list(page: number, size: number): Observable<any> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+    };
+    return this.http.get<any>(`${this.PROJETO_URL}/listar`, { params });
+  }
 }

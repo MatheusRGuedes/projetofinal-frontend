@@ -6,14 +6,12 @@ import { ProjetoRoutingModule } from './projeto-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
-  declarations: [
-    ProjetoComponent
-  ],
+  declarations: [ProjetoComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ProjetoRoutingModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class ProjetoModule { }
+export class ProjetoModule {}
