@@ -4,17 +4,16 @@ import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjetoService {
+  private readonly PROJETO_URL: string = `${environment.apiUrl}/projeto`;
+  private readonly USUARIO_URL: string = `${environment.apiUrl}/usuario/listar`;
 
-  private readonly PROJETO_URL :string = `${environment.apiUrl}/projeto`;
-  
-  constructor(
-    private http :HttpClient
-  ) { }
+  constructor(private http: HttpClient) {}
 
-  save(projeto :any, id? :number) :Observable<any> {
+  // Método para salvar o projeto
+  save(projeto: any, id?: number): Observable<any> {
     // if(id) {
     //   return this.update(projeto, id);
     // }
@@ -22,9 +21,14 @@ export class ProjetoService {
   }
 
   private insert(projeto: any): Observable<any> {
-    return this.http.post(`${this.PROJETO_URL}/cadastrar`, projeto)
-      .pipe(
-        map(response => 'Projeto gravado com sucesso.')
-      );
+    return this.http
+      .post(`${this.PROJETO_URL}/cadastrar`, projeto)
+      .pipe(map((response) => 'Projeto gravado com sucesso.'));
+  }
+
+  getUsuarios(): Observable<any[]> {
+    return this.http
+      .get<any>(this.USUARIO_URL)
+      .pipe(map((response) => response.content));
   }
 }
