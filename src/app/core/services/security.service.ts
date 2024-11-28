@@ -63,8 +63,8 @@ export class SecurityService {
     return usuarioLogado ? usuarioLogado.role : null;
   }
 
-  // public get token() :any {
-  //   const token :any = localStorage.getItem('token');
-  //   return token ? token : null;
-  // }
+  public get token() :any {
+    const token :any = localStorage.getItem('token');
+    return token ? token : null;
+  }
 }
