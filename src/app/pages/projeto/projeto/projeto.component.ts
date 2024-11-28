@@ -17,16 +17,12 @@ import { ProjetoService } from 'src/app/core/services/projeto.service';
 export class ProjetoComponent {
   private subscription: Subscription | undefined;
   public form: FormGroup = new FormGroup({});
-  public usuarios: any[] = [];
-  public usuarioSelecionado: any;
-
   id: number | undefined;
 
   constructor(private builder: FormBuilder, private service: ProjetoService) {}
 
   ngOnInit() {
     this.createForm();
-    this.loadUsuarios();
   }
 
   private createForm() {
@@ -38,7 +34,6 @@ export class ProjetoComponent {
       descricaoProjeto: this.builder.control('descricao teste', [
         Validators.required,
       ]),
-      usuarioId: this.builder.control('', [Validators.required]), // Campo para armazenar o ID do usuário
       etapas: this.builder.array([
         this.builder.group({
           idEtapa: this.builder.control(''),
@@ -82,20 +77,15 @@ export class ProjetoComponent {
     return this.form.get(campo)?.invalid && this.form.get(campo)?.dirty;
   }
 
-  public selecionarUsuario(usuario: any): void {
-    this.usuarioSelecionado = usuario;
-    this.form.get('usuarioId')?.setValue(usuario.id);
-  }
-
   gravarDados(): void {
     if (this.form.invalid) {
+      //markAllAsDirty(this.form);
       return;
     }
 
     const projeto = {
       titulo: this.titulo.value,
       descricaoProjeto: this.descricaoProjeto.value,
-      usuarioId: this.usuarioId.value,
       etapas: this.etapas.map((etapa, indexEtapa) => {
         return {
           idEtapa: etapa.get('idEtapa')?.value,
@@ -121,57 +111,41 @@ export class ProjetoComponent {
         };
       }),
     };
-
     console.log(projeto);
     this.subscription = this.service.save(projeto, this.id).subscribe({
-      next: (res) => alert(res),
-      error: (err) => alert(err),
+      next: (res) => alert(res), //this.alert.success(res),
+      error: (err) => {
+        alert(err); //this.alert.error(err);
+      },
     });
   }
 
   get titulo(): FormControl {
     return this.form.get('titulo') as FormControl;
   }
-
   get descricaoProjeto(): FormControl {
     return this.form.get('descricaoProjeto') as FormControl;
   }
-
-  get usuarioId(): FormControl {
-    return this.form.get('usuarioId') as FormControl;
-  }
-
   get etapas(): FormGroup[] {
     return (this.form.get('etapas') as FormArray).controls as FormGroup[];
   }
-
   getNomeEtapa(index: any): FormGroup {
     return this.etapas[index].get('nomeEtapa') as FormGroup;
   }
-
   getPerguntas(indexEtapa: any): FormGroup[] {
     return (this.etapas[indexEtapa].get('perguntas') as FormArray)
       .controls as FormGroup[];
   }
-
+  getTipoPergunta(indexEtapa: any, indexPergunta: any): FormControl {
+    return this.getPerguntas(indexEtapa)
+      .at(indexPergunta)
+      ?.get('tipoPergunta') as FormControl;
+  }
   getOpcoesResposta(indexEtapa: any, indexPergunta: any): FormGroup[] {
     return (
       this.getPerguntas(indexEtapa)
         .at(indexPergunta)
         ?.get('opcoesResposta') as FormArray
     ).controls as FormGroup[];
-  }
-
-  getTipoPergunta(indexEtapa: any, indexPergunta: any): FormControl {
-    return this.getPerguntas(indexEtapa)
-      .at(indexPergunta)
-      ?.get('tipoPergunta') as FormControl;
-  }
-
-  private loadUsuarios(): void {
-    this.service.getUsuarios().subscribe((usuarios: any[]) => {
-      this.usuarios = usuarios;
-      console.log(this.usuarios);
-    });
   }
 }

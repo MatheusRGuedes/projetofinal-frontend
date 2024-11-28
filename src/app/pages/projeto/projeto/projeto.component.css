@@ -63,11 +63,3 @@
   background: #0e5b85;
   border: 1px solid white;
 }
-
-.accordion-button {
-  cursor: pointer;
-}
-
-.list-group-item button {
-  cursor: pointer;
-}
