@@ -4,9 +4,10 @@ import { ProjetoComponent } from './projeto/projeto.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ProjetoRoutingModule } from './projeto-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { AndamentoComponent } from './listar/andamento/andamento.component';
 
 @NgModule({
-  declarations: [ProjetoComponent],
+  declarations: [ProjetoComponent, AndamentoComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
