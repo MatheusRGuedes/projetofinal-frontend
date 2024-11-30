@@ -30,6 +30,22 @@ export class ProjetoService {
     return this.http.get<any>(`${this.PROJETO_URL}/listar`, { params });
   }
 
+  listarEmAndamento(page: number, size: number): Observable<any> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+    };
+    return this.http.get<any>(`${this.PROJETO_URL}/acompanhar`, { params });
+  }
+
+  listarEmAndamentoUsuarioLogado(page: number, size: number): Observable<any> {
+    const params = {
+      page: page.toString(),
+      size: size.toString(),
+    };
+    return this.http.get<any>(`${this.PROJETO_URL}/acompanhar/ususariologado`, { params });
+  }
+
   associarUsuario(projetoId: number, usuarioId: number): Observable<any> {
     return this.http
       .post(`${this.PROJETO_URL}/associarusuario/${projetoId}/${usuarioId}`, {}, { responseType: 'text' })

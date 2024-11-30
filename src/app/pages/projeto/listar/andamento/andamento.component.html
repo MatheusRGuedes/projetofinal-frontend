@@ -1,1 +1,46 @@
-<p>andamento works!</p>
+<div class="container">
+  <h2>Acompanhamento de projetos</h2>
+
+  <div *ngIf="projetos.length === 0" class="alert alert-info">
+    Não há projetos vinculados ou em andamento ao usuário.
+  </div>
+
+  <table class="table table-bordered" *ngIf="projetos.length > 0">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Situação</th>
+        <th>Total de Etapas</th>
+        <th>Etapas Concluídas</th>
+        <th>Data de Início</th>
+        <th>Data de Fim</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr *ngFor="let projeto of projetos">
+        <td>{{ projeto.titulo }}</td>
+        <td>{{ projeto.situacao }}</td>
+        <td>{{ projeto.totalEtapas }}</td>
+        <td>{{ projeto.etapasConcluidas }}</td>
+        <td>{{ projeto.dataInicio ? (projeto.dataInicio | date:'dd/MM/yyyy') : 'N/A' }}</td>
+        <td>{{ projeto.dataFim ? (projeto.dataFim | date:'dd/MM/yyyy') : 'N/A' }}</td>
+        <td>
+          <button class="btn btn-info btn-sm">Ver Detalhes</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <nav *ngIf="projetos.length !== 0" aria-label="Page navigation" class="d-flex justify-content-center">
+    <ul class="pagination">
+      <li class="page-item" [class.disabled]="pageNumber === 0">
+        <a class="page-link" href="#" (click)="onPageChange(pageNumber - 1)">Anterior</a>
+      </li>
+      <li class="page-item" [class.disabled]="pageNumber >= totalElements / pageSize - 1">
+        <a class="page-link" href="#" (click)="onPageChange(pageNumber + 1)">Próxima</a>
+      </li>
+    </ul>
+  </nav>
+</div>
