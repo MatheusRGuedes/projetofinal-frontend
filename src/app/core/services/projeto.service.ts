@@ -8,13 +8,11 @@ import { environment } from 'src/environments/environment';
 })
 export class ProjetoService {
   private readonly PROJETO_URL: string = `${environment.apiUrl}/projeto`;
+  private readonly USUARIO_URL: string = `${environment.apiUrl}/usuario`;
 
   constructor(private http: HttpClient) {}
 
   save(projeto: any, id?: number): Observable<any> {
-    // if(id) {
-    //   return this.update(projeto, id);
-    // }
     return this.insert(projeto);
   }
 
@@ -31,4 +29,28 @@ export class ProjetoService {
     };
     return this.http.get<any>(`${this.PROJETO_URL}/listar`, { params });
   }
+
+  associarUsuario(projetoId: number, usuarioId: number): Observable<any> {
+    return this.http
+      .post(`${this.PROJETO_URL}/associarusuario/${projetoId}/${usuarioId}`, {}, { responseType: 'text' })
+      .pipe(
+        map((response: string) => {
+          return { message: response };
+        })
+      );
+  }
+
+  desassociarUsuario(projetoId: number, usuarioId: number): Observable<any> {
+    return this.http.delete(`${this.PROJETO_URL}/desassociar/${projetoId}/${usuarioId}`, {})
+      
+  }
+
+  listarUsuariosDisponiveis(idProjeto: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.USUARIO_URL}/listardisponiveis/${idProjeto}`);
+  }
+
+  listarUsuariosEmProjeto(idProjeto: number): Observable<any[]> {
+    return this.http.get<any[]>(`${this.USUARIO_URL}/listarporprojeto/${idProjeto}`);
+  }
+
 }
