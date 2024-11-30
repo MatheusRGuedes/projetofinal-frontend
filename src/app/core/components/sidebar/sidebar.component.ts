@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { SecurityService } from '../../services/security.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -17,7 +18,7 @@ export class SidebarComponent {
   public sidebarMenu :HTMLElement | null = null;
 
   constructor(
-    //private securityService :SecurityService
+    private securityService :SecurityService
   ) {    
   }
 
@@ -28,12 +29,11 @@ export class SidebarComponent {
   }
 
   getUserRole() {
-    // const usuarioLogado = this.securityService.usuarioLogado;
-    // if (usuarioLogado) {
-    //   this.userRole = usuarioLogado.role;
-      //console.log(this.userRole);
-    // } else {
-    //   console.error("Usuário não se encontra logado.");
-    // }
+    const usuarioLogado = this.securityService.usuarioLogado;
+    if (usuarioLogado) {
+      this.userRole = usuarioLogado.role;
+    } else {
+      console.error("Usuário não se encontra logado.");
+    }
   }
 }

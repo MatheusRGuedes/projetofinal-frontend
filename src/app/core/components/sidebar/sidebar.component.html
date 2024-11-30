@@ -8,8 +8,7 @@
         <span class="text">Início</span>
       </a>
     </li>
-    <li class="mb-1">
-      <!-- *ngIf="userRole === 'ROLE_ADMIN'" -->
+    <li class="mb-1" *ngIf="userRole === 'Administrador'">
       <a
         class="btn btn-toggle rounded link-item collapsed"
         data-bs-toggle="collapse"
@@ -37,18 +36,16 @@
       </a>
       <div class="collapse" id="consultas-collapse">
         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-          <li>
-            <a routerLink="/projetos/listar" class="rounded">Projeto</a>
+          <li *ngIf="userRole === 'Administrador'">
+            <a routerLink="/projetos/listar" class="rounded">Projetos</a>
+          </li>
+          <li *ngIf="userRole === 'Colaborador'">
+            <a routerLink="/projetos/consultar" class="rounded">Projetos vinculados</a>
+          <li *ngIf="userRole === 'Colaborador' || userRole === 'Administrador'">
+            <a routerLink="/projetos/consultar" class="rounded">Projetos em andamento</a>
           </li>
         </ul>
       </div>
-    </li>
-
-    <li class="mb-1">
-      <!-- *ngIf="userRole === 'ROLE_USER' || userRole === 'ROLE_ADMIN'" -->
-      <a routerLink="/" class="btn rounded link-item">
-        <span class="text">teste</span>
-      </a>
     </li>
     <li class="border-top my-3"></li>
   </ul>
