@@ -1,44 +1,52 @@
 <div class="sidebar p-3">
-    <div class="logo_box border-bottom">
-        <a href="/" class="d-flex align-items-center text-decoration-none"></a>
-    </div>
-    <ul class="list-unstyled ps-0">
-        <li class="mb-1">
-            <a href="#" class="btn rounded link-item">
-                <span class="text">Início</span>
-            </a>
-        </li>
-        <li class="mb-1"> <!-- *ngIf="userRole === 'ROLE_ADMIN'" -->
-            <a class="btn btn-toggle rounded link-item collapsed" data-bs-toggle="collapse" data-bs-target="#cadastro-collapse" aria-expanded="false">
-                <span class="text">Cadastro</span>
-            </a>
-            <div class="collapse" id="cadastro-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li><a routerLink="/projetos/cadastro" class="rounded">Projeto</a></li>
-                </ul>
-            </div>
-        </li>
-        <li class="mb-1">
-            <a class="btn btn-toggle rounded link-item collapsed" data-bs-toggle="collapse" data-bs-target="#consultas-collapse" aria-expanded="false">
-                <span class="text">Consultas</span>
-            </a>
-            <div class="collapse" id="consultas-collapse">
-                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li>
-                        <a routerLink="/" class="rounded">teste 1</a>
-                    </li>
-                    <li>
-                        <a routerLink="/" class="rounded">teste 2</a>
-                    </li>
-                </ul>
-            </div>
-        </li>
-       
-        <li class="mb-1"> <!-- *ngIf="userRole === 'ROLE_USER' || userRole === 'ROLE_ADMIN'" -->
-            <a routerLink="/" class="btn rounded link-item">
-                <span class="text">teste</span>
-            </a>
-        </li>
-        <li class="border-top my-3"></li>
-    </ul>
+  <div class="logo_box border-bottom">
+    <a href="/" class="d-flex align-items-center text-decoration-none"></a>
+  </div>
+  <ul class="list-unstyled ps-0">
+    <li class="mb-1">
+      <a href="#" class="btn rounded link-item">
+        <span class="text">Início</span>
+      </a>
+    </li>
+    <li class="mb-1" *ngIf="userRole === 'Administrador'">
+      <a
+        class="btn btn-toggle rounded link-item collapsed"
+        data-bs-toggle="collapse"
+        data-bs-target="#cadastro-collapse"
+        aria-expanded="false"
+      >
+        <span class="text">Cadastro</span>
+      </a>
+      <div class="collapse" id="cadastro-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li>
+            <a routerLink="/projetos/cadastro" class="rounded">Projeto</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <a
+        class="btn btn-toggle rounded link-item collapsed"
+        data-bs-toggle="collapse"
+        data-bs-target="#consultas-collapse"
+        aria-expanded="false"
+      >
+        <span class="text">Consultas</span>
+      </a>
+      <div class="collapse" id="consultas-collapse">
+        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+          <li *ngIf="userRole === 'Administrador'">
+            <a routerLink="/projetos/listar" class="rounded">Projetos</a>
+          </li>
+          <li *ngIf="userRole === 'Colaborador'">
+            <a routerLink="/projetos/consultar" class="rounded">Projetos vinculados</a>
+          <li *ngIf="userRole === 'Colaborador' || userRole === 'Administrador'">
+            <a routerLink="/projetos/andamento" class="rounded">Acompanhamento de Projetos</a>
+          </li>
+        </ul>
+      </div>
+    </li>
+    <li class="border-top my-3"></li>
+  </ul>
 </div>

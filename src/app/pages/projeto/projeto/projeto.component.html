@@ -1,23 +1,15 @@
 <div class="container">
-    <div class="border-bottom mb-4">
-        <p class="m-0">Cadastre um Projeto.</p>
-    </div>
+  <div class="border-bottom mb-4">
+    <p class="m-0">Cadastre um Projeto.</p>
+  </div>
 
-    <form [formGroup]="form" novalidate>
-        <div class="d-flex mb-2">
-            <div class="form-floating">
-                <input type="text" class="form-control" id="titulo" placeholder="Título" size="25" formControlName="titulo">
-                <label for="titulo">Título</label>
-                <div *ngIf="campoInvalido('titulo')" class="container-error">
-                    <span *ngIf="titulo.errors!['required']">É obrigatório.</span>
-                </div>
-            </div>
-            <div class="form-floating">
-                <input type="text" class="form-control" id="descricaoProjeto" placeholder="Descrição" size="50" formControlName="descricaoProjeto">
-                <label for="descricaoProjeto">Descricao do Projeto</label>
-                <div *ngIf="campoInvalido('descricaoProjeto')" class="container-error">
-                    <span *ngIf="descricaoProjeto.errors!['required']">É obrigatório.</span>
-                </div>
+  <form [formGroup]="form" novalidate>
+    <div class="d-flex mb-2">
+        <div class="form-floating">
+            <input type="text" class="form-control" id="titulo" placeholder="Título" size="25" formControlName="titulo" />
+            <label for="titulo">Título</label>
+            <div *ngIf="campoInvalido('titulo')" class="container-error">
+            <span *ngIf="titulo.errors!['required']">É obrigatório.</span>
             </div>
         </div>
         <!-- Etapas -->
@@ -29,8 +21,7 @@
                 </button>
             </div>
             <div *ngFor="let etapa of etapas; let indexEtapa = index" [formGroupName]="indexEtapa">
-                 <div class="cardContent">
-              
+                <div class="cardContent">
                     <div class="container">
                         <input type="hidden" id="idEtapa" formControlName="idEtapa">
                         <div class="form-group" style="display: flex; align-items: flex-end;">
@@ -113,30 +104,29 @@
                                 </div>
                             </div>
                         </div>
-                     </div>
+                    </div>
                 </div>
-
-                 
             </div>
         </div>
+    </div>
 
-        <botao-acao styleId="btnSalvar" 
-            (executaAcaoEvent)="gravarDados()" 
-            style="margin-right: 10px;">
-            Salvar
-        </botao-acao>
+    <botao-acao styleId="btnSalvar" 
+        (executaAcaoEvent)="gravarDados()" 
+        style="margin-right: 10px;">
+        Salvar
+    </botao-acao>
+  </form>
 
-        <!-- modal etapa -->
-        <modal-selecao-etapas
-            [mostrar]="showModalEtapa"
-            [registros]="listaEtapasModal"
-            (onSelecionar)="retornarEtapaModal($event)">
-        </modal-selecao-etapas>
-        <!-- modal pergunta -->
-        <modal-selecao-perguntas
-            [mostrar]="showModalPergunta"
-            [registros]="listaPerguntasModal"
-            (onSelecionar)="retornarPerguntaModal($event)">
-        </modal-selecao-perguntas>
-    </form>
+    <!-- modal etapa -->
+    <modal-selecao-etapas
+        [mostrar]="showModalEtapa"
+        [registros]="listaEtapasModal"
+        (onSelecionar)="retornarEtapaModal($event)">
+    </modal-selecao-etapas>
+    <!-- modal pergunta -->
+    <modal-selecao-perguntas
+        [mostrar]="showModalPergunta"
+        [registros]="listaPerguntasModal"
+        (onSelecionar)="retornarPerguntaModal($event)">
+    </modal-selecao-perguntas>
 </div>

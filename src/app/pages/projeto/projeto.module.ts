@@ -6,18 +6,19 @@ import { ProjetoRoutingModule } from './projeto-routing.module';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { SelecaoEtapasComponent } from './selecao-etapas/selecao-etapas.component';
 import { SelecaoPerguntasComponent } from './selecao-perguntas/selecao-perguntas.component';
+import { AndamentoComponent } from './listar/andamento/andamento.component';
 
 @NgModule({
   declarations: [
-    ProjetoComponent,
+    ProjetoComponent, 
+    AndamentoComponent, 
     SelecaoEtapasComponent,
-    SelecaoPerguntasComponent
-  ],
+    SelecaoPerguntasComponent],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     ProjetoRoutingModule,
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
-export class ProjetoModule { }
+export class ProjetoModule {}
