@@ -5,11 +5,9 @@
   border-radius: 5px;
 }
 
-/* .container {
-  display: flex;
-  justify-content: space-around;
-  width: 70%;
-} */
+.container {
+  margin-bottom: 15px;
+}
 
 .container label {
   font-weight: 500;

@@ -20,48 +20,36 @@
                 </div>
             </div>
         </div>
-            <!-- <div class="form-floating">
-                <select class="form-select" [ngClass]="campoInvalido('sexo') ? 'invalid-field' : ''" id="floatingSexo" aria-label="Sexo" formControlName="sexo">
-                    <option value="">Selecione...</option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Feminino</option>
-                </select>
-                <label for="floatingSexo">Sexo</label>
-                <div *ngIf="campoInvalido('sexo')" class="container-error">
-                    <span *ngIf="sexo.errors!['required']">Campo obrigatório.</span>
-                </div>
-            </div> -->
-            <!-- Etapas -->
+        <!-- Etapas -->
         <div class="etapas" formArrayName="etapas">
             <div class="alinhar titulo">
               <div><h2>Etapas</h2></div>
                <button class="buttonNovo" type="button" (click)="addEtapas()">
-                   <i class="fa-solid fa-plus"></i> Novo
+                     Novo
                 </button>
             </div>
-              
             <div *ngFor="let etapa of etapas; let indexEtapa = index" [formGroupName]="indexEtapa">
                  <div class="cardContent">
               
                     <div class="container">
-                            <!-- <div style="top: 12px; position: relative;">
-                                <button class="checkbox" type="button" (click)="setSelecionado(i, !getSelecionado(i))">
-                                <i class="fa-solid fa-check green" *ngIf="!getSelecionado(i).value"></i>
-                                <i class="fa-solid fa-x red" *ngIf="getSelecionado(i).value"></i>
+                        <input type="hidden" id="idEtapa" formControlName="idEtapa">
+                        <div class="form-group" style="display: flex; align-items: flex-end;">
+                            <div class="col-sm-10">                                
+                                <label for="nomeEtapa">Nome Etapa</label>
+                                <input type="text" class="form-control" id="nomeEtapa" placeholder="Etapa" size="25" formControlName="nomeEtapa">
+                                <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
+                                    <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <button class="buttonNovo" type="button" 
+                                    (click)="carregarEtapas(); toggleEtapa(); indexEtapaAtual = indexEtapa">
+                                    Reutilizar
                                 </button>
-                            </div> -->
-              
-                        <div class="form-group">
-                            <input type="hidden" id="idEtapa" formControlName="idEtapa">
-                            
-                            <label for="nomeEtapa">Nome Etapa</label>
-                            <input type="text" class="form-control" id="nomeEtapa" placeholder="Etapa" size="25" formControlName="nomeEtapa">
-                            <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
-                                <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
                             </div>
                         </div>
 
-                        <!-- Detalhe pergunta-->
+                        <!-- Detalhe perguntas -->
                         <div class="etapas" formArrayName="perguntas">
                             <div class="alinhar titulo">
                                 <div><h2>Perguntas</h2></div>
@@ -71,19 +59,28 @@
                             </div>
                             <div *ngFor="let pergunta of getPerguntas(indexEtapa); let indexPergunta = index" [formGroupName]="indexPergunta">
                                 <div class="container">
-                                    <div class="form-group">
-                                        <input type="hidden" id="idPergunta" formControlName="idPergunta">
-                                        <label for="descricaoPergunta">Descricao Pergunta</label>
-                                        <input type="text" class="form-control" id="descricaoPergunta" placeholder="Etapa" size="25" formControlName="descricaoPergunta">
-                                        <!-- <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
-                                            <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
-                                        </div> -->
+                                    <div class="form-group" style="display: flex; align-items: flex-end;">
+                                        <div class="col-sm-10" >
+                                            <input type="hidden" id="idPergunta" formControlName="idPergunta">
+                                            <label for="descricaoPergunta">Descricao Pergunta</label>
+                                            <input type="text" class="form-control" id="descricaoPergunta" placeholder="Etapa" size="25" formControlName="descricaoPergunta">
+                                            <!-- <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
+                                                <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button class="buttonNovo" type="button" 
+                                                (click)="carregarPerguntas(); togglePergunta(); 
+                                                    indexEtapaAtual = indexEtapa; indexPerguntaAtual = indexPergunta">
+                                                Reutilizar
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="form-group">
                                         <label for="tipoPergunta">Tipo Pergunta</label>
                                         <select class="form-select" id="tipoPergunta" aria-label="Posto Serviço" formControlName="tipoPergunta">
                                             <option value="">Selecione...</option>
-                                            <option value="TEXTO">TEXTO</option>
+                                            <option value="STRING">TEXTO</option>
                                             <option value="MULTIPLA_ESCOLHA">MULTIPLA ESCOLHA</option>
                                             <option value="NUMERICO">NUMERICO</option>
                                         </select>
@@ -100,6 +97,7 @@
                                                 </button>
                                             </div>
                                             <div *ngFor="let opcao of getOpcoesResposta(indexEtapa, indexPergunta); let indexOpcao = index" [formGroupName]="indexOpcao">
+                                                <input type="hidden" id="idResposta" formControlName="idResposta">
                                                 <div class="container">
                                                     <div class="form-group">
                                                         <label for="opcaoResposta">Opção</label>
@@ -117,11 +115,28 @@
                         </div>
                      </div>
                 </div>
+
+                 
             </div>
         </div>
 
-        <botao-acao styleId="btnSalvar" (executaAcaoEvent)="gravarDados()" style="margin-right: 10px;">
+        <botao-acao styleId="btnSalvar" 
+            (executaAcaoEvent)="gravarDados()" 
+            style="margin-right: 10px;">
             Salvar
         </botao-acao>
+
+        <!-- modal etapa -->
+        <modal-selecao-etapas
+            [mostrar]="showModalEtapa"
+            [registros]="listaEtapasModal"
+            (onSelecionar)="retornarEtapaModal($event)">
+        </modal-selecao-etapas>
+        <!-- modal pergunta -->
+        <modal-selecao-perguntas
+            [mostrar]="showModalPergunta"
+            [registros]="listaPerguntasModal"
+            (onSelecionar)="retornarPerguntaModal($event)">
+        </modal-selecao-perguntas>
     </form>
 </div>

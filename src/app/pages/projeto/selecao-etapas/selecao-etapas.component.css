@@ -1,0 +1,18 @@
+.tabela-customizada {
+    width: 100%;
+    background-color: white;
+}
+
+.tabela-customizada thead tr {
+    background-color: #edf1fd;
+    color: #7d7d8f; /*#34344d*/
+    font-size: 0.95rem;
+    padding: .35rem;
+}
+
+.tabela-customizada tbody tr {
+    font-size: 0.9rem;
+    color: rgb(102, 102, 105);
+    border-bottom: 1px solid #dddddd;
+    cursor: pointer;
+}

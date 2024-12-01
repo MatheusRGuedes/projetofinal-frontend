@@ -1,0 +1,25 @@
+<!-- modal projeto -->
+<app-modal [mostrar]="mostrar" #modal>
+     <h1>Lista Etapas.</h1>
+     <table class="tabela-customizada">
+          <thead>
+               <tr>
+                    <!-- <th><input type="radio" id="selecionar" name="selecionar"></th> -->
+                    <th scope="col">Título</th>
+               </tr>
+          </thead>
+
+          <tbody>
+               <tr *ngFor="let obj of registros" (click)="selecionar(obj); modal.toggle();">
+                    <td>{{obj.titulo}}</td>
+               </tr>
+          </tbody>
+     </table>
+     <button
+          (click)="modal.toggle();"
+          class="btn-primario">Fechar
+     </button>
+          
+     <!-- <button
+     class="btn-secundario">Ação 2</button> --> 
+</app-modal> 

@@ -1,0 +1,26 @@
+<!-- modal perguntas -->
+<app-modal [mostrar]="mostrar" #modal2>
+    <h1>Lista Perguntas.</h1>
+    <table class="tabela-customizada">
+         <thead>
+              <tr>
+                   <!-- <th><input type="radio" id="selecionar" name="selecionar"></th> -->
+                   <th scope="col">Descrição</th>
+                   <th scope="col">Tipo Pergunta</th>
+              </tr>
+         </thead>
+         <tbody>
+              <tr *ngFor="let obj of registros" (click)="selecionar(obj); modal2.toggle();">
+                   <td>{{obj.descricaoPergunta}}</td>
+                   <td>{{obj.tipoPergunta}}</td>
+              </tr>
+         </tbody>
+    </table>
+    <button
+         (click)="modal2.toggle();"
+         class="btn-primario">Fechar
+    </button>
+         
+    <!-- <button
+    class="btn-secundario">Ação 2</button> --> 
+</app-modal> 
