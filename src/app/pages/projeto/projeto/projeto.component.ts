@@ -275,7 +275,7 @@ export class ProjetoComponent {
         this.addPerguntas(this.indexEtapaAtual);
       
       this.getPerguntas(this.indexEtapaAtual)[indexPergunta].patchValue({
-        // "idPergunta": pergunta.id,
+        "idPergunta": pergunta.id,
         "descricaoPergunta": pergunta.descricaoPergunta,
         "tipoPergunta": tipoPergunta
       });
@@ -285,7 +285,7 @@ export class ProjetoComponent {
             this.addOpcaoResposta(this.indexEtapaAtual, indexPergunta);
 
           this.getOpcoesResposta(this.indexEtapaAtual, indexPergunta)[indexOpcao].patchValue({
-            // "idResposta": opcao.id,
+            "idResposta": opcao.id,
             "opcaoResposta": opcao.resposta
           })
         });
@@ -298,6 +298,7 @@ export class ProjetoComponent {
 
     let tipoPergunta = this.getDescricaoTipoResposta(pergunta.tipoPergunta);
     this.getPerguntas(this.indexEtapaAtual)[this.indexPerguntaAtual].patchValue({
+      "idPergunta": pergunta.id,
       "descricaoPergunta": pergunta.descricaoPergunta,
       "tipoPergunta": tipoPergunta
     });
@@ -307,7 +308,7 @@ export class ProjetoComponent {
           this.addOpcaoResposta(this.indexEtapaAtual, this.indexPerguntaAtual);
 
         this.getOpcoesResposta(this.indexEtapaAtual, this.indexPerguntaAtual)[indexOpcao].patchValue({
-          // "idResposta": opcao.id,
+          "idResposta": opcao.id,
           "opcaoResposta": opcao.resposta
         })
       });
