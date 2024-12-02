@@ -92,6 +92,9 @@ export class ProjetoComponent {
               "nomeEtapa": etapa.titulo
             });
             etapa.perguntas.map((pergunta :any, indexPergunta: number) => {
+              if (!this.getPerguntas(indexEtapa)[indexPergunta]) 
+                this.addPerguntas(indexEtapa);
+
               let tipoPergunta = this.getDescricaoTipoResposta(pergunta.tipoPergunta);
               this.getPerguntas(indexEtapa)[indexPergunta].patchValue({
                 "idPergunta": pergunta.id,
