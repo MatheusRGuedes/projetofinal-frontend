@@ -35,4 +35,8 @@ export class PerguntaService {
     )
     //return of([{ id: 1, descricao: "TESTE"}]);
   }
+
+  responderPergunta(resposta: any): Observable<string> {
+    return this.http.post<string>(`${this.PERGUNTA_URL}/responder`, resposta);
+  }
 }

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { ProjetoService } from 'src/app/core/services/projeto.service';
 import { SecurityService } from 'src/app/core/services/security.service';
 
@@ -18,7 +19,8 @@ export class AndamentoComponent {
   constructor(
     private projetoService: ProjetoService,
     private snackBar: MatSnackBar,
-    private authService: SecurityService
+    private authService: SecurityService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -48,6 +50,11 @@ export class AndamentoComponent {
         }
       });
     }
+  }
+
+  irParaResponder(idProjeto: number): void {
+    console.log('irParaResponder', idProjeto);
+    this.router.navigate([`/projetos/responder`, idProjeto]);
   }
 
   onPageChange(page: number): void {

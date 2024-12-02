@@ -30,6 +30,10 @@ export class ProjetoService {
     return this.http.get<any>(`${this.PROJETO_URL}/listar`, { params });
   }
 
+  listarPorId(id: number): Observable<any> {
+    return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}`);
+  }
+
   listarEmAndamento(page: number, size: number): Observable<any> {
     const params = {
       page: page.toString(),
