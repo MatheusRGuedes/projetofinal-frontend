@@ -10,6 +10,7 @@ const routes: Routes = [
   { path: 'listar', component: ListarComponent },
   { path: 'andamento', component: AndamentoComponent },
   { path: 'responder/:id', component: ResponderComponent },
+  { path: 'responder/:id/:idUsuario', component: ResponderComponent },
   // { path: 'editar/:id', component:  }, //role admin
   // { path: '', component:  }, //role admin
 

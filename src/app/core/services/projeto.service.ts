@@ -34,6 +34,14 @@ export class ProjetoService {
     return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}`);
   }
 
+  listarPorIdeIdUsuario(id: number, idUsuario: number): Observable<any> {
+    return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}/${idUsuario}`);
+  }
+
+  buscarListaUsuarioNoProjeto(idProjeto: number): Observable<any> {
+    return this.http.get<any>(`${this.USUARIO_URL}/listarporprojeto/${idProjeto}`);
+  }
+
   listarEmAndamento(page: number, size: number): Observable<any> {
     const params = {
       page: page.toString(),

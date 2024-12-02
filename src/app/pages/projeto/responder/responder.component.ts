@@ -24,7 +24,12 @@ export class ResponderComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: { [key: string]: any }) => {
-      if (params && params['id']) {
+      if( params && params['id'] && params['idUsuario'] ) {
+        this.projetoId = +params['id'];
+        const idUsuario = +params['idUsuario'];
+        this.buscarProjeto(this.projetoId, idUsuario);
+      }
+      else if (params && params['id']) {
         this.projetoId = +params['id'];
         this.buscarProjeto(this.projetoId);
       } else {
@@ -33,31 +38,55 @@ export class ResponderComponent implements OnInit {
     });
   }
   
-  buscarProjeto(id: number): void {
-    this.projetoService.listarPorId(id).subscribe({
-      next: (projeto) => {
-        this.projeto = projeto;
-
-        this.projeto.etapas.forEach((etapa: any) => {
-          etapa.perguntas.forEach((pergunta: any) => {
-            if (pergunta.tipoPergunta === 'Múltipla Escolha' && pergunta.respondida) {
-              const opcaoSelecionada = pergunta.opcoesResposta.find(
-                (opcao: any) => opcao.resposta === pergunta.resposta
-              );
-              if (opcaoSelecionada) {
-                pergunta.resposta = opcaoSelecionada.id;
+  buscarProjeto(id: number, idUsuario?: number): void {
+    if(id && idUsuario) {
+      this.projetoService.listarPorIdeIdUsuario(id, idUsuario).subscribe({
+        next: (response) => {
+          this.projeto = response;
+          console.log('Projeto encontrado:', this.projeto);
+          this.projeto.etapas.forEach((etapa: any) => {
+            etapa.perguntas.forEach((pergunta: any) => {
+              if (pergunta.tipoPergunta === 'Múltipla Escolha' && pergunta.respondida) {
+                const opcaoSelecionada = pergunta.opcoesResposta.find(
+                  (opcao: any) => opcao.resposta === pergunta.resposta
+                );
+                if (opcaoSelecionada) {
+                  pergunta.resposta = opcaoSelecionada.id;
+                }
               }
-            }
+            });
           });
-        });
-      },
-      error: (err) => {
-        console.error('Erro ao buscar projeto:', err);
-        this.snackBar.open('Erro ao carregar o projeto.', 'Fechar', {
-          duration: 3000,
-        });
-      }
-    });
+        },
+        error: (err) => {
+          console.error('Erro ao buscar projeto:', err);
+        }
+      });
+    } else {
+      this.projetoService.listarPorId(id).subscribe({
+        next: (projeto) => {
+          this.projeto = projeto;
+  
+          this.projeto.etapas.forEach((etapa: any) => {
+            etapa.perguntas.forEach((pergunta: any) => {
+              if (pergunta.tipoPergunta === 'Múltipla Escolha' && pergunta.respondida) {
+                const opcaoSelecionada = pergunta.opcoesResposta.find(
+                  (opcao: any) => opcao.resposta === pergunta.resposta
+                );
+                if (opcaoSelecionada) {
+                  pergunta.resposta = opcaoSelecionada.id;
+                }
+              }
+            });
+          });
+        },
+        error: (err) => {
+          console.error('Erro ao buscar projeto:', err);
+          this.snackBar.open('Erro ao carregar o projeto.', 'Fechar', {
+            duration: 3000,
+          });
+        }
+      });
+    }
   }
 
   enviarResposta(etapaId: number, pergunta: any): void {

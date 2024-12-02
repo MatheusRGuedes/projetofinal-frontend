@@ -15,6 +15,9 @@ export class AndamentoComponent {
   pageNumber: number = 0;
   pageSize: number = 10;
   isAdmin: boolean = false;
+  usuariosVinculados: any[] = [];
+  projetoSelecionado: any = null;
+  usuarioSelecionado: number | null = null;
 
   constructor(
     private projetoService: ProjetoService,
@@ -25,8 +28,54 @@ export class AndamentoComponent {
 
   ngOnInit(): void {
     this.isAdmin = this.authService.usuarioRole === 'Administrador';
+    console.log('isAdmin', this.isAdmin);
     this.listarProjetos();
   }
+
+  abrirModal(projeto: any): void {
+    this.projetoSelecionado = projeto;
+    this.buscarUsuariosVinculados(projeto.idProjeto);
+
+    const modal = new (window as any).bootstrap.Modal(
+      document.getElementById('usuariosModal')
+    );
+    modal.show();
+  }
+
+  buscarUsuariosVinculados(idProjeto: number): void {
+    this.projetoService.buscarListaUsuarioNoProjeto(idProjeto).subscribe({
+      next: (response: any) => {
+        this.usuariosVinculados = response;
+      },
+      error: (error: any) => {
+        console.error('Erro ao buscar usuários vinculados', error);
+      }
+    });
+  }
+
+  visualizarRespostas(idUsuario: number | null): void {
+    if (this.projetoSelecionado && idUsuario) {
+
+      const modalElement = document.getElementById('usuariosModal');
+      if (modalElement) {
+        const modal = new (window as any).bootstrap.Modal(modalElement);
+        modal.hide(); // Fecha o modal
+      }
+  
+      const modalBackdrop = document.querySelector('.modal-backdrop');
+      if (modalBackdrop) {
+        modalBackdrop.remove();
+      }
+      document.body.classList.remove('modal-open');
+  
+      this.router.navigate([`/projetos/responder`, this.projetoSelecionado.idProjeto, idUsuario]);
+    } else {
+      this.snackBar.open('Selecione um usuário antes de continuar.', 'Fechar', {
+        duration: 3000,
+      });
+    }
+  }
+  
 
   listarProjetos(): void {
     if(this.isAdmin) {
