@@ -18,7 +18,6 @@
       </tr>
     </thead>
     <tbody>
-
       <tr *ngFor="let projeto of projetos">
         <td>{{ projeto.titulo }}</td>
         <td>{{ projeto.situacao }}</td>
@@ -26,21 +25,50 @@
         <td>{{ projeto.etapasConcluidas }}</td>
         <td>{{ projeto.dataInicio ? (projeto.dataInicio | date:'dd/MM/yyyy') : 'N/A' }}</td>
         <td>{{ projeto.dataFim ? (projeto.dataFim | date:'dd/MM/yyyy') : 'N/A' }}</td>
-          <td>
-            <button class="btn btn-info btn-sm" (click)="irParaResponder(projeto.idProjeto)">Responder</button>
-          </td>          
+        <td *ngIf="!isAdmin">
+          <button class="btn btn-info btn-sm" (click)="irParaResponder(projeto.idProjeto)">Responder</button>
+        </td>
+        <td *ngIf="isAdmin">
+          <button class="btn btn-info btn-sm" (click)="abrirModal(projeto)">Visualizar</button>
+        </td>
       </tr>
     </tbody>
   </table>
+<!-- Modal -->
+<div class="modal fade" id="usuariosModal" tabindex="-1" aria-labelledby="usuariosModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="usuariosModalLabel">Usuários vinculados ao projeto</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Projeto ID:</strong> {{ projetoSelecionado?.idProjeto }}</p>
+        <p><strong>Projeto Título:</strong> {{ projetoSelecionado?.titulo }}</p>
 
-  <nav *ngIf="projetos.length !== 0" aria-label="Page navigation" class="d-flex justify-content-center">
-    <ul class="pagination">
-      <li class="page-item" [class.disabled]="pageNumber === 0">
-        <a class="page-link" href="#" (click)="onPageChange(pageNumber - 1)">Anterior</a>
-      </li>
-      <li class="page-item" [class.disabled]="pageNumber >= totalElements / pageSize - 1">
-        <a class="page-link" href="#" (click)="onPageChange(pageNumber + 1)">Próxima</a>
-      </li>
-    </ul>
-  </nav>
+        <label for="usuariosSelect">Usuários vinculados:</label>
+        <select
+          id="usuariosSelect"
+          class="form-select"
+          [(ngModel)]="usuarioSelecionado"
+        >
+          <option *ngFor="let usuario of usuariosVinculados" [value]="usuario.id">
+            {{ usuario.nome }}
+          </option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="visualizarRespostas(usuarioSelecionado)"
+        >
+          Visualizar Respostas
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
+
+
