@@ -30,6 +30,10 @@ export class ProjetoService {
       .pipe(map((response) => 'Projeto gravado com sucesso.'));
   }
 
+  excluirProjeto(id: number): Observable<any> {
+    return this.http.delete(`${this.PROJETO_URL}/excluir/${id}`, {});
+  }
+
   list(page: number, size: number): Observable<any> {
     const params = {
       page: page.toString(),
@@ -44,6 +48,14 @@ export class ProjetoService {
   
   listarPorId(id: number): Observable<any> {
     return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}`);
+  }
+
+  listarPorIdeIdUsuario(id: number, idUsuario: number): Observable<any> {
+    return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}/${idUsuario}`);
+  }
+
+  buscarListaUsuarioNoProjeto(idProjeto: number): Observable<any> {
+    return this.http.get<any>(`${this.USUARIO_URL}/listarporprojeto/${idProjeto}`);
   }
 
   listarEmAndamento(page: number, size: number): Observable<any> {

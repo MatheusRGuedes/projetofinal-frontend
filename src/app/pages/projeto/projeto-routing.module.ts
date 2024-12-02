@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'andamento', component: AndamentoComponent }, //role admin
   { path: 'editar/:id', component: ProjetoComponent }, //role admin
   { path: 'responder/:id', component: ResponderComponent },
+  { path: 'responder/:id/:idUsuario', component: ResponderComponent },
   // { path: 'editar/:id', component:  }, //role admin
   // { path: '', component:  }, //role admin
 
