@@ -8,6 +8,7 @@
   <table class="table table-bordered" *ngIf="projetos.length > 0">
     <thead>
       <tr>
+        <th>Colaborador</th>
         <th>Título</th>
         <th>Situação</th>
         <th>Total de Etapas</th>
@@ -19,12 +20,13 @@
     </thead>
     <tbody>
       <tr *ngFor="let projeto of projetos">
+        <td>{{ projeto.usuario.nome }}</td>
         <td>{{ projeto.titulo }}</td>
         <td>{{ projeto.situacao }}</td>
         <td>{{ projeto.totalEtapas }}</td>
         <td>{{ projeto.etapasConcluidas }}</td>
         <td>{{ projeto.dataInicio ? (projeto.dataInicio | date:'dd/MM/yyyy') : 'N/A' }}</td>
-        <td>{{ projeto.dataFim ? (projeto.dataFim | date:'dd/MM/yyyy') : 'N/A' }}</td>
+        <td>{{ projeto.datafim ? (projeto.datafim | date:'dd/MM/yyyy') : 'N/A' }}</td>
         <td *ngIf="!isAdmin">
           <button class="btn btn-info btn-sm" (click)="irParaResponder(projeto.idProjeto)">Responder</button>
         </td>
