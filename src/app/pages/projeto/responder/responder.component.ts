@@ -100,13 +100,14 @@ export class ResponderComponent implements OnInit {
       idOpcaoResposta: pergunta.tipoPergunta === 'Múltipla Escolha' ? pergunta.resposta : null,
       respostaNumerica: pergunta.tipoPergunta === 'Numérico' ? pergunta.resposta : null
     };
-  
+    
     this.perguntaService.responderPergunta(respostaDTO).subscribe({
       next: (response) => {
         console.log(`Resposta enviada com sucesso para o projeto ${this.projetoId}:`, response);
         this.snackBar.open('Resposta enviada com sucesso!', 'Fechar', {
           duration: 3000
         });
+        this.ngOnInit();
       },
       error: (err) => {
         console.error(`Erro ao enviar resposta para o projeto ${this.projetoId}:`, err);
