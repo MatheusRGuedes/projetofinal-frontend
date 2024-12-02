@@ -157,21 +157,23 @@ export class ProjetoComponent {
       return;
     }
   
+    console.log('Formulário antes do envio:', this.form.value); // Adicione este log
+  
     const projeto = {
       id: this.id || null,
       titulo: this.titulo.value,
       etapas: this.etapas.map((etapa, indexEtapa) => {
         return {
-          idEtapa: etapa.get('idEtapa')?.value, // Reutilizado se já tiver ID
+          id: etapa.get('idEtapa')?.value, // Certifique-se de que este ID não é nulo aqui
           nomeEtapa: etapa.get('nomeEtapa')?.value,
           perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
             return {
-              idPergunta: pergunta.get('idPergunta')?.value, // Reutilizado se já tiver ID
+              id: pergunta.get('idPergunta')?.value, // Certifique-se de que este ID não é nulo aqui
               descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
               tipoPergunta: pergunta.get('tipoPergunta')?.value,
               opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
                 return {
-                  idResposta: opcao.get('idResposta')?.value, // Reutilizado se já tiver ID
+                  idResposta: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
                   opcaoResposta: opcao.get('opcaoResposta')?.value,
                 };
               }),
@@ -181,7 +183,7 @@ export class ProjetoComponent {
       }),
     };
   
-    console.log(projeto);
+    console.log('Payload enviado:', projeto); // Verifique o payload final
   
     this.subscription = this.service.save(projeto, this.id!).subscribe({
       next: (res) => {
@@ -192,6 +194,8 @@ export class ProjetoComponent {
       },
     });
   }
+  
+  
   
 
   private atualizarEtapas() {
@@ -255,11 +259,12 @@ export class ProjetoComponent {
   }
 
   retornarEtapaModal(etapa: any): void {
+    console.log('Etapa selecionada:', etapa);
     this.etapas[this.indexEtapaAtual].patchValue({
-      idEtapa: etapa.id, // Indica que foi reutilizado
+      idEtapa: etapa.id, // ID da etapa reutilizada
       nomeEtapa: etapa.titulo,
     });
-  
+    
     etapa.perguntas.forEach((pergunta: any, indexPergunta: number) => {
       if (!this.getPerguntas(this.indexEtapaAtual)[indexPergunta]) {
         this.addPerguntas(this.indexEtapaAtual);
@@ -286,10 +291,12 @@ export class ProjetoComponent {
     });
   }
   
+  
 
   retornarPerguntaModal(pergunta: any): void {
+    console.log('Pergunta selecionada:', pergunta); // Verifique o objeto pergunta
     this.getPerguntas(this.indexEtapaAtual)[this.indexPerguntaAtual].patchValue({
-      idPergunta: pergunta.id, // Indica que foi reutilizado
+      idPergunta: pergunta.id, // Certifique-se de que este ID não é nulo
       descricaoPergunta: pergunta.descricaoPergunta,
       tipoPergunta: this.getDescricaoTipoResposta(pergunta.tipoPergunta),
     });
