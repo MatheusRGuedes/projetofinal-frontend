@@ -15,7 +15,7 @@
         <td>{{ projeto.createdAt | date }}</td>
         <td>
           <button *ngIf="isAdmin" class="btn btn-success" (click)="openModal(projeto)">
-            Associar
+            Associar 
           </button>
           <button *ngIf="projeto.possuiUsuarios && isAdmin" class="btn btn-warning" (click)="openDesassociarModal(projeto)">
             Desassociar
@@ -23,7 +23,7 @@
           <button *ngIf="isAdmin" class="btn btn-primary" (click)="onAction(projeto, 'editar')">
             Editar
           </button>
-          <button *ngIf="isAdmin" class="btn btn-danger" (click)="onAction(projeto, 'excluir')">
+          <button *ngIf="projeto.possuiUsuarios && isAdmin" class="btn btn-danger" (click)="onAction(projeto, 'excluir')">
             Excluir
           </button>
         </td>

@@ -6,7 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EtapaService } from 'src/app/core/services/etapa.service';
 import { PerguntaService } from 'src/app/core/services/pergunta.service';
@@ -22,7 +22,7 @@ export class ProjetoComponent {
   public form: FormGroup = new FormGroup({});
   id: number | undefined;
 
-  possuiUsuarios: boolean = false;
+  modoEditar :boolean = false
   showModalEtapa: boolean = false;
   showModalPergunta: boolean = false;
 
@@ -37,7 +37,8 @@ export class ProjetoComponent {
     private service :ProjetoService,
     private etapaService :EtapaService,
     private perguntaService :PerguntaService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router :Router
   ) {
   }
 
@@ -47,6 +48,7 @@ export class ProjetoComponent {
     this.subscription = this.activatedRoute.params.subscribe(params => {
       if (params["id"]) {
         this.id = Number(params["id"]);
+        this.modoEditar = this.router.url.includes('editar');
         this.recuperarProjeto();
       }
     });
@@ -79,7 +81,6 @@ export class ProjetoComponent {
     this.subscription = this.service.find(this.id as number)
       .subscribe({
         next: (projeto) => {
-          this.possuiUsuarios = projeto.possuiUsuarios;
 
           this.form.patchValue({
             "titulo": projeto.titulo
@@ -204,20 +205,38 @@ export class ProjetoComponent {
     if(!this.id) return;
 
     this.etapas.map((etapa :FormGroup, indexEtapa :number) => {
+
       this.etapaService.save({
-        "id": etapa.get('idEtapa'),
-        "titulo": etapa.get('nomeEtapa')
-      })
-      // .subscribe({
-      //   next: () => {
-      //     this.atualizarPerguntas();
-      //   }
-      // })
+        "id": etapa.get('idEtapa')?.value,
+        "titulo": etapa.get('nomeEtapa')?.value
+      }) .subscribe({
+        next: () => {
+          this.atualizarPerguntas(indexEtapa)
+        }
+      });
     });
   }
 
-  private atualizarPerguntas() {
-    
+  private atualizarPerguntas( indexEtapa:number) {
+    this.getPerguntas(indexEtapa).map((pergunta:any, indexPergunta :number) => {
+      this.perguntaService.save({
+        "id": pergunta.get('idPergunta')?.value,
+        "descricaoPergunta": pergunta.get('descricaoPergunta')?.value
+      }).subscribe({
+        next: () => {
+          this.atualizarOpcoesResposta(indexEtapa, indexPergunta)
+        }
+      })
+    })
+  }
+
+  private atualizarOpcoesResposta(indexEtapa:number, indexPergunta:number) {
+    this.getOpcoesResposta(indexEtapa, indexPergunta).map((resposta) => {
+      this.perguntaService.updateOpcaoResposta({
+        "opcaoRespostaId": resposta.get('idResposta')?.value,
+        "opcaoResposta": resposta.get('opcaoResposta')?.value
+      }).subscribe()
+    })
   }
 
   carregarEtapas() {

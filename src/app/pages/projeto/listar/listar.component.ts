@@ -31,11 +31,13 @@ export class ListarComponent implements OnInit {
   ngOnInit(): void {
     this.listarProjetos();
     this.isAdmin = this.authService.usuarioRole === 'Administrador';
+    console.log(this.authService.usuarioRole)
   }
 
   listarProjetos(): void {
     this.projetoService.list(this.pageNumber, this.pageSize).subscribe(
       (response: any) => {
+        console.log(response)
         this.projetos = response.content;
         this.totalElements = response.totalElements;
       },

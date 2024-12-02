@@ -9,23 +9,33 @@ import { environment } from 'src/environments/environment';
 export class PerguntaService {
 
   private readonly PERGUNTA_URL :string = `${environment.apiUrl}/pergunta`;
+  private readonly RESPOSTA_URL :string = `${this.PERGUNTA_URL}/opcaoresposta`;
   
   constructor(
     private http :HttpClient
   ) { }
 
-  save(etapa :any, id? :number) :Observable<any> {
-    // if(id) {
-    //   return this.update(etapa, id);
-    // }
-    return this.insert(etapa);
+  save(pergunta :any, id? :number) :Observable<any> {
+    if(pergunta.id) {
+      return this.update(pergunta);
+    }
+    return this.insert(pergunta);
   }
 
-  private insert(etapa: any): Observable<any> {
-    return this.http.post(`${this.PERGUNTA_URL}/cadastrar`, etapa)
+  private insert(pergunta: any): Observable<any> {
+    return this.http.post(`${this.PERGUNTA_URL}/cadastrar`, pergunta)
       .pipe(
-        map(response => 'Etapa gravado com sucesso.')
+        map(response => 'Pergunta gravado com sucesso.')
       );
+  }
+  private update(pergunta: any): Observable<any> {
+    return this.http
+      .put(`${this.PERGUNTA_URL}/editar/${pergunta.id}`, pergunta)
+      .pipe(map((response) => 'Pergunta gravada com sucesso.'));
+  }
+
+  updateOpcaoResposta(resposta : any) :Observable<any> {
+    return this.http.put(`${this.RESPOSTA_URL}/editar/${resposta.id}`, resposta);
   }
 
   getAll() :Observable<any[]> {
