@@ -41,6 +41,10 @@ export class ProjetoService {
   find(id :number) :Observable<any> {
     return this.http.get<any>(`${this.PROJETO_URL}/buscar/${id}`);
   }
+  
+  listarPorId(id: number): Observable<any> {
+    return this.http.get<any>(`${this.PROJETO_URL}/buscarcomresposta/${id}`);
+  }
 
   listarEmAndamento(page: number, size: number): Observable<any> {
     const params = {
