@@ -165,7 +165,7 @@ export class ListarComponent implements OnInit {
             modal.hide();
           }
 
-          this.listarProjetos();
+          window.location.reload();
 
           this.snackBar.open('Usuário desassociado com sucesso ao projeto!', '', {
             duration: 3000,
@@ -201,12 +201,13 @@ export class ListarComponent implements OnInit {
             modal.hide();
           }
   
-          this.listarProjetos();
+          window.location.reload();
   
           this.snackBar.open('Usuário associado com sucesso ao projeto!', '', {
             duration: 3000,
             panelClass: ['snackbar-success'],
           });
+          
         },
         error: (error) => {
           this.snackBar.open('Erro ao associar o usuário ao projeto.', '', {
