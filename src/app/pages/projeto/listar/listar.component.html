@@ -23,7 +23,7 @@
           <button *ngIf="isAdmin" class="btn btn-primary" (click)="onAction(projeto, 'editar')">
             Editar
           </button>
-          <button *ngIf="isAdmin" class="btn btn-danger" (click)="onAction(projeto, 'excluir')">
+          <button *ngIf="!projeto.possuiUsuarios && isAdmin" type="button" class="btn btn-danger" data-bs-dismiss="modal" (click)="excluirProjeto(projeto)">
             Excluir
           </button>
         </td>
@@ -41,6 +41,7 @@
         <div class="modal-body">
           <div class="form-group">
             <label for="usuarioSelectDesassociar">Selecione o usuário para desassociar</label>
+            <p class="text-danger">Ao desassociar todas as respostas do colaborador serão perdidas!</p>
             <select class="form-control" id="usuarioSelectDesassociar" [(ngModel)]="usuarioDesassociar">
               <option *ngFor="let usuario of usuariosAssociados" [ngValue]="usuario">
                 {{ usuario.nome }}
@@ -83,6 +84,26 @@
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="confirmarExclusaoModal" tabindex="-1" aria-labelledby="confirmarExclusaoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmarExclusaoModalLabel">Confirmar Exclusão</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza de que deseja excluir o projeto <strong>{{ projetoSelecionado?.titulo }}</strong>?</p>
+          <p class="text-danger">Esta ação não pode ser desfeita.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" (click)="confirmarExclusao()">Excluir</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
 
   <nav aria-label="Page navigation">
     <ul class="pagination">

@@ -54,8 +54,54 @@ export class ListarComponent implements OnInit {
     if (action === 'editar') {
       console.log('Editar projeto', projeto);
       this.router.navigateByUrl(`/projetos/editar/${projeto.id}`);
-    } else if (action === 'excluir') {
-      console.log('Excluir projeto', projeto);
+    }
+  }
+
+  excluirProjeto(projeto: any): void {
+    // Salva o projeto selecionado para exclusão
+    this.projetoSelecionado = projeto;
+
+    // Abre o modal de confirmação
+    const modalElement = document.getElementById('confirmarExclusaoModal');
+    if (modalElement) {
+      const modal = new (window as any).bootstrap.Modal(modalElement);
+      modal.show();
+    }
+  }
+
+  confirmarExclusao(): void {
+    if (this.projetoSelecionado) {
+      this.projetoService.excluirProjeto(this.projetoSelecionado.id).subscribe({
+        next: (response) => {
+          // Atualizar a lista de projetos
+          this.listarProjetos();
+    
+          // Exibir a notificação de sucesso
+          this.snackBar.open('Projeto excluído com sucesso!', '', {
+            duration: 3000,
+            panelClass: ['snackbar-success'],
+          });
+    
+          // Fechar o modal e remover o backdrop
+          const modalElement = document.getElementById('confirmarExclusaoModal');
+          if (modalElement) {
+            modalElement.classList.remove('show');
+            modalElement.setAttribute('aria-hidden', 'true');
+            modalElement.removeAttribute('aria-modal');
+            modalElement.style.display = 'none';
+          }
+          const modalBackdrop = document.querySelector('.modal-backdrop');
+          if (modalBackdrop) {
+            modalBackdrop.remove();
+          }
+        },
+        error: (error) => {
+          this.snackBar.open('Erro ao excluir o projeto.', '', {
+            duration: 3000,
+            panelClass: ['snackbar-error'],
+          });
+        }
+      });
     }
   }
 
