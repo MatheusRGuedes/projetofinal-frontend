@@ -35,7 +35,7 @@
                                 </div>
                             </div>
                             <div class="col-sm-2">
-                                <button  *ngif="!modoEditar" class="buttonNovo" type="button" 
+                                <button *ngIf="!modoEditar" class="buttonNovo" type="button" 
                                     (click)="carregarEtapas(); toggleEtapa(); indexEtapaAtual = indexEtapa">
                                     Reutilizar
                                 </button>
@@ -46,7 +46,7 @@
                         <div class="detalhe" formArrayName="perguntas">
                             <div class="alinhar titulo">
                                 <div><h2>Perguntas</h2></div>
-                                <button *ngif="!modoEditar" class="buttonNovo" type="button" (click)="addPerguntas(indexEtapa)">
+                                <button *ngIf="!modoEditar" class="buttonNovo" type="button" (click)="addPerguntas(indexEtapa)">
                                    <i class="fa-solid fa-plus"></i> Novo
                                 </button>
                             </div>
@@ -62,7 +62,7 @@
                                             </div> -->
                                         </div>
                                         <div class="col-sm-2">
-                                            <button *ngif="!modoEditar" class="buttonNovo" type="button" 
+                                            <button *ngIf="!modoEditar" class="buttonNovo" type="button" 
                                                 (click)="carregarPerguntas(); togglePergunta(); 
                                                 indexEtapaAtual = indexEtapa; indexPerguntaAtual = indexPergunta">
                                                 Reutilizar
@@ -85,7 +85,7 @@
                                         <div class="detalhe" formArrayName="opcoesResposta">
                                             <div class="alinhar titulo">
                                                 <div><h2>Opções resposta</h2></div>
-                                                <button *ngif="!modoEditar" class="buttonNovo" type="button" (click)="addOpcaoResposta(indexEtapa, indexPergunta)">
+                                                <button *ngIf="!modoEditar" class="buttonNovo" type="button" (click)="addOpcaoResposta(indexEtapa, indexPergunta)">
                                                    <i class="fa-solid fa-plus"></i> Novo
                                                 </button>
                                             </div>

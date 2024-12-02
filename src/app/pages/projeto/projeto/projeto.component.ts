@@ -44,11 +44,12 @@ export class ProjetoComponent {
 
   ngOnInit() {
     this.createForm();
+    this.modoEditar = this.router.url.includes('editar');
+    console.log(this.modoEditar)
 
     this.subscription = this.activatedRoute.params.subscribe(params => {
       if (params["id"]) {
         this.id = Number(params["id"]);
-        this.modoEditar = this.router.url.includes('editar');
         this.recuperarProjeto();
       }
     });
