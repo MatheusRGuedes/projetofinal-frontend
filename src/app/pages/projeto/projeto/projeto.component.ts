@@ -154,56 +154,45 @@ export class ProjetoComponent {
 
   gravarDados(): void {
     if (this.form.invalid) {
-      //markAllAsDirty(this.form);
       return;
     }
-
-    let projeto = {};
-    if (this.id) {
-      projeto = {
-        id: this.id,
-        titulo: this.titulo.value
-      }
-    } else {
-      projeto = {
-        titulo: this.titulo.value,
-        etapas: this.etapas.map((etapa, indexEtapa) => {
-          return {
-            idEtapa: etapa.get('idEtapa')?.value,
-            nomeEtapa: this.getNomeEtapa(indexEtapa).value,
-            perguntas: this.getPerguntas(indexEtapa).map(
-              (pergunta, indexPergunta) => {
+  
+    const projeto = {
+      id: this.id || null,
+      titulo: this.titulo.value,
+      etapas: this.etapas.map((etapa, indexEtapa) => {
+        return {
+          idEtapa: etapa.get('idEtapa')?.value, // Reutilizado se já tiver ID
+          nomeEtapa: etapa.get('nomeEtapa')?.value,
+          perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
+            return {
+              idPergunta: pergunta.get('idPergunta')?.value, // Reutilizado se já tiver ID
+              descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
+              tipoPergunta: pergunta.get('tipoPergunta')?.value,
+              opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
                 return {
-                  idPergunta: pergunta.get('idPergunta')?.value,
-                  descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
-                  tipoPergunta: pergunta.get('tipoPergunta')?.value,
-                  opcoesResposta: this.getOpcoesResposta(
-                    indexEtapa,
-                    indexPergunta
-                  ).map((opcao) => {
-                    return {
-                      opcaoResposta: opcao.get('opcaoResposta')?.value,
-                      perguntaID: pergunta.get('idPergunta')?.value,
-                    };
-                  }),
+                  idResposta: opcao.get('idResposta')?.value, // Reutilizado se já tiver ID
+                  opcaoResposta: opcao.get('opcaoResposta')?.value,
                 };
-              }
-            ),
-          };
-        }),
-      };
-    }
+              }),
+            };
+          }),
+        };
+      }),
+    };
+  
     console.log(projeto);
+  
     this.subscription = this.service.save(projeto, this.id!).subscribe({
       next: (res) => {
-        alert(res);
-        this.atualizarEtapas();
+        alert('Projeto salvo com sucesso!');
       },
       error: (err) => {
         alert(err.error.message);
       },
     });
   }
+  
 
   private atualizarEtapas() {
     if(!this.id) return;
@@ -265,58 +254,60 @@ export class ProjetoComponent {
     );
   }
 
-  retornarEtapaModal(etapa :any) {
-    console.log(etapa);
-    
+  retornarEtapaModal(etapa: any): void {
     this.etapas[this.indexEtapaAtual].patchValue({
-        "idEtapa": etapa.id,
-        "nomeEtapa": etapa.titulo
-    })
-    etapa.perguntas.map((pergunta :any, indexPergunta :number) => {
-      let tipoPergunta = this.getDescricaoTipoResposta(pergunta.tipoPergunta);
-      if (!this.getPerguntas(this.indexEtapaAtual)[indexPergunta]) 
+      idEtapa: etapa.id, // Indica que foi reutilizado
+      nomeEtapa: etapa.titulo,
+    });
+  
+    etapa.perguntas.forEach((pergunta: any, indexPergunta: number) => {
+      if (!this.getPerguntas(this.indexEtapaAtual)[indexPergunta]) {
         this.addPerguntas(this.indexEtapaAtual);
-      
+      }
+  
       this.getPerguntas(this.indexEtapaAtual)[indexPergunta].patchValue({
-        "idPergunta": pergunta.id,
-        "descricaoPergunta": pergunta.descricaoPergunta,
-        "tipoPergunta": tipoPergunta
+        idPergunta: pergunta.id, // Indica que foi reutilizado
+        descricaoPergunta: pergunta.descricaoPergunta,
+        tipoPergunta: this.getDescricaoTipoResposta(pergunta.tipoPergunta),
       });
-      if (tipoPergunta === 'MULTIPLA_ESCOLHA') {
-        pergunta.opcoesResposta.map((opcao :any, indexOpcao: number) => {
-          if (!this.getOpcoesResposta(this.indexEtapaAtual, indexPergunta)[indexOpcao])
+  
+      if (pergunta.tipoPergunta === 'MULTIPLA_ESCOLHA') {
+        pergunta.opcoesResposta.forEach((opcao: any, indexOpcao: number) => {
+          if (!this.getOpcoesResposta(this.indexEtapaAtual, indexPergunta)[indexOpcao]) {
             this.addOpcaoResposta(this.indexEtapaAtual, indexPergunta);
-
+          }
+  
           this.getOpcoesResposta(this.indexEtapaAtual, indexPergunta)[indexOpcao].patchValue({
-            "idResposta": opcao.id,
-            "opcaoResposta": opcao.resposta
-          })
+            idResposta: opcao.id, // Indica que foi reutilizado
+            opcaoResposta: opcao.resposta,
+          });
         });
       }
     });
   }
+  
 
-  retornarPerguntaModal(pergunta :any) {
-    console.log(pergunta);
-
-    let tipoPergunta = this.getDescricaoTipoResposta(pergunta.tipoPergunta);
+  retornarPerguntaModal(pergunta: any): void {
     this.getPerguntas(this.indexEtapaAtual)[this.indexPerguntaAtual].patchValue({
-      "idPergunta": pergunta.id,
-      "descricaoPergunta": pergunta.descricaoPergunta,
-      "tipoPergunta": tipoPergunta
+      idPergunta: pergunta.id, // Indica que foi reutilizado
+      descricaoPergunta: pergunta.descricaoPergunta,
+      tipoPergunta: this.getDescricaoTipoResposta(pergunta.tipoPergunta),
     });
-    if (tipoPergunta === 'MULTIPLA_ESCOLHA') {
-      pergunta.opcoesResposta.map((opcao :any, indexOpcao: number) => {
-        if (!this.getOpcoesResposta(this.indexEtapaAtual, this.indexPerguntaAtual)[indexOpcao])
+  
+    if (pergunta.tipoPergunta === 'MULTIPLA_ESCOLHA') {
+      pergunta.opcoesResposta.forEach((opcao: any, indexOpcao: number) => {
+        if (!this.getOpcoesResposta(this.indexEtapaAtual, this.indexPerguntaAtual)[indexOpcao]) {
           this.addOpcaoResposta(this.indexEtapaAtual, this.indexPerguntaAtual);
-
+        }
+  
         this.getOpcoesResposta(this.indexEtapaAtual, this.indexPerguntaAtual)[indexOpcao].patchValue({
-          "idResposta": opcao.id,
-          "opcaoResposta": opcao.resposta
-        })
+          idResposta: opcao.id, // Indica que foi reutilizado
+          opcaoResposta: opcao.resposta,
+        });
       });
     }
   }
+  
 
   private getDescricaoTipoResposta(valor :string) :string {
     switch (valor) {
