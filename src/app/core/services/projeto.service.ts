@@ -13,12 +13,20 @@ export class ProjetoService {
   constructor(private http: HttpClient) {}
 
   save(projeto: any, id?: number): Observable<any> {
+    if (id) {
+      return this.update(projeto);
+    }
     return this.insert(projeto);
   }
 
   private insert(projeto: any): Observable<any> {
     return this.http
       .post(`${this.PROJETO_URL}/cadastrar`, projeto)
+      .pipe(map((response) => 'Projeto gravado com sucesso.'));
+  }
+  private update(projeto: any): Observable<any> {
+    return this.http
+      .put(`${this.PROJETO_URL}/editar`, projeto)
       .pipe(map((response) => 'Projeto gravado com sucesso.'));
   }
 
@@ -28,6 +36,10 @@ export class ProjetoService {
       size: size.toString(),
     };
     return this.http.get<any>(`${this.PROJETO_URL}/listar`, { params });
+  }
+
+  find(id :number) :Observable<any> {
+    return this.http.get<any>(`${this.PROJETO_URL}/buscar/${id}`);
   }
 
   listarEmAndamento(page: number, size: number): Observable<any> {

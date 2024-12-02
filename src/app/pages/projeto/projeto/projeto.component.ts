@@ -6,6 +6,7 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { EtapaService } from 'src/app/core/services/etapa.service';
 import { PerguntaService } from 'src/app/core/services/pergunta.service';
@@ -21,6 +22,7 @@ export class ProjetoComponent {
   public form: FormGroup = new FormGroup({});
   id: number | undefined;
 
+  possuiUsuarios: boolean = false;
   showModalEtapa: boolean = false;
   showModalPergunta: boolean = false;
 
@@ -34,22 +36,27 @@ export class ProjetoComponent {
     private builder :FormBuilder,
     private service :ProjetoService,
     private etapaService :EtapaService,
-    private perguntaService :PerguntaService
+    private perguntaService :PerguntaService,
+    private activatedRoute: ActivatedRoute
   ) {
   }
 
   ngOnInit() {
     this.createForm();
+
+    this.subscription = this.activatedRoute.params.subscribe(params => {
+      if (params["id"]) {
+        this.id = Number(params["id"]);
+        this.recuperarProjeto();
+      }
+    });
   }
 
   private createForm() {
     this.form = this.builder.group({
-      titulo: this.builder.control('titulo teste', [
+      "titulo": this.builder.control('', [
         Validators.required,
         Validators.maxLength(100),
-      ]),
-      descricaoProjeto: this.builder.control('descricao teste', [
-        Validators.required,
       ]),
       etapas: this.builder.array([
         this.builder.group({
@@ -68,6 +75,47 @@ export class ProjetoComponent {
     });
   }
 
+  private recuperarProjeto() {
+    this.subscription = this.service.find(this.id as number)
+      .subscribe({
+        next: (projeto) => {
+          this.possuiUsuarios = projeto.possuiUsuarios;
+
+          this.form.patchValue({
+            "titulo": projeto.titulo
+          });
+          projeto.etapas.map((etapa :any, indexEtapa: number) => {
+            this.etapas[indexEtapa].patchValue({
+              "idEtapa": etapa.id,
+              "nomeEtapa": etapa.titulo
+            });
+            etapa.perguntas.map((pergunta :any, indexPergunta: number) => {
+              let tipoPergunta = this.getDescricaoTipoResposta(pergunta.tipoPergunta);
+              this.getPerguntas(indexEtapa)[indexPergunta].patchValue({
+                "idPergunta": pergunta.id,
+                "descricaoPergunta": pergunta.descricaoPergunta,
+                "tipoPergunta": tipoPergunta
+              });
+              if (tipoPergunta === 'MULTIPLA_ESCOLHA') {
+                pergunta.opcoesResposta.map((opcao :any, indexOpcao: number) => {
+                  if (!this.getOpcoesResposta(indexEtapa, indexPergunta)[indexOpcao])
+                    this.addOpcaoResposta(indexEtapa, indexPergunta);
+        
+                  this.getOpcoesResposta(indexEtapa, indexPergunta)[indexOpcao].patchValue({
+                    "idResposta": opcao.id,
+                    "opcaoResposta": opcao.resposta
+                  })
+                });
+              }
+            });
+          });
+
+        }, error :(res) => {
+          alert(res.error.message);
+        },
+    });
+  }
+
   public addEtapas(etapa? :any) {
     const newEtapa = this.builder.group({
       idEtapa: this.builder.control(etapa ? etapa.id : ''),
@@ -80,11 +128,8 @@ export class ProjetoComponent {
   public addPerguntas(indexEtapa: any) {
     const newPergunta = this.builder.group({
       idPergunta: this.builder.control(''),
-      descricaoPergunta: this.builder.control(
-        'Pergunta nova criada para o projeto de exemplo',
-        [Validators.required]
-      ),
-      tipoPergunta: this.builder.control('NUMERICO', [Validators.required]),
+      descricaoPergunta: this.builder.control('', [Validators.required]),
+      tipoPergunta: this.builder.control('', [Validators.required]),
       opcoesResposta: this.builder.array([]),
     });
     return this.getPerguntas(indexEtapa).push(newPergunta);
@@ -108,41 +153,71 @@ export class ProjetoComponent {
       return;
     }
 
-    const projeto = {
-      titulo: this.titulo.value,
-      descricaoProjeto: this.descricaoProjeto.value,
-      etapas: this.etapas.map((etapa, indexEtapa) => {
-        return {
-          idEtapa: etapa.get('idEtapa')?.value,
-          nomeEtapa: this.getNomeEtapa(indexEtapa).value,
-          perguntas: this.getPerguntas(indexEtapa).map(
-            (pergunta, indexPergunta) => {
-              return {
-                idPergunta: pergunta.get('idPergunta')?.value,
-                descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
-                tipoPergunta: pergunta.get('tipoPergunta')?.value,
-                opcoesResposta: this.getOpcoesResposta(
-                  indexEtapa,
-                  indexPergunta
-                ).map((opcao) => {
-                  return {
-                    opcaoResposta: opcao.get('opcaoResposta')?.value,
-                    perguntaID: pergunta.get('idPergunta')?.value,
-                  };
-                }),
-              };
-            }
-          ),
-        };
-      }),
-    };
+    let projeto = {};
+    if (this.id) {
+      projeto = {
+        id: this.id,
+        titulo: this.titulo.value
+      }
+    } else {
+      projeto = {
+        titulo: this.titulo.value,
+        etapas: this.etapas.map((etapa, indexEtapa) => {
+          return {
+            idEtapa: etapa.get('idEtapa')?.value,
+            nomeEtapa: this.getNomeEtapa(indexEtapa).value,
+            perguntas: this.getPerguntas(indexEtapa).map(
+              (pergunta, indexPergunta) => {
+                return {
+                  idPergunta: pergunta.get('idPergunta')?.value,
+                  descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
+                  tipoPergunta: pergunta.get('tipoPergunta')?.value,
+                  opcoesResposta: this.getOpcoesResposta(
+                    indexEtapa,
+                    indexPergunta
+                  ).map((opcao) => {
+                    return {
+                      opcaoResposta: opcao.get('opcaoResposta')?.value,
+                      perguntaID: pergunta.get('idPergunta')?.value,
+                    };
+                  }),
+                };
+              }
+            ),
+          };
+        }),
+      };
+    }
     console.log(projeto);
-    this.subscription = this.service.save(projeto, this.id).subscribe({
-      next: (res) => alert(res), //this.alert.success(res),
+    this.subscription = this.service.save(projeto, this.id!).subscribe({
+      next: (res) => {
+        alert(res);
+        this.atualizarEtapas();
+      },
       error: (err) => {
-        alert(err); //this.alert.error(err);
+        alert(err.error.message);
       },
     });
+  }
+
+  private atualizarEtapas() {
+    if(!this.id) return;
+
+    this.etapas.map((etapa :FormGroup, indexEtapa :number) => {
+      this.etapaService.save({
+        "id": etapa.get('idEtapa'),
+        "titulo": etapa.get('nomeEtapa')
+      })
+      // .subscribe({
+      //   next: () => {
+      //     this.atualizarPerguntas();
+      //   }
+      // })
+    });
+  }
+
+  private atualizarPerguntas() {
+    
   }
 
   carregarEtapas() {
@@ -242,11 +317,11 @@ export class ProjetoComponent {
   get titulo() :FormControl {
     return this.form.get('titulo') as FormControl;
   }
-  get descricaoProjeto(): FormControl {
-    return this.form.get('descricaoProjeto') as FormControl;
-  }
   get etapas(): FormGroup[] {
     return (this.form.get('etapas') as FormArray).controls as FormGroup[];
+  }
+  getIdEtapa(index: any): FormGroup {
+    return this.etapas[index].get('idEtapa') as FormGroup;
   }
   getNomeEtapa(index: any): FormGroup {
     return this.etapas[index].get('nomeEtapa') as FormGroup;

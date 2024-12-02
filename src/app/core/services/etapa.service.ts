@@ -14,10 +14,10 @@ export class EtapaService {
     private http :HttpClient
   ) { }
 
-  save(etapa :any, id? :number) :Observable<any> {
-    // if(id) {
-    //   return this.update(etapa, id);
-    // }
+  save(etapa :any) :Observable<any> {
+    if(etapa.id) {
+      return this.update(etapa);
+    }
     return this.insert(etapa);
   }
 
@@ -26,6 +26,11 @@ export class EtapaService {
       .pipe(
         map(response => 'Etapa gravado com sucesso.')
       );
+  }
+  private update(etapa: any): Observable<any> {
+    return this.http
+      .put(`${this.ETAPA_URL}/editar`, etapa)
+      .pipe(map((response) => 'Etapa gravada com sucesso.'));
   }
 
   getAll() :Observable<any[]> {

@@ -8,7 +8,7 @@ const routes: Routes = [
   { path: 'cadastro', component: ProjetoComponent }, //role admin
   { path: 'listar', component: ListarComponent },
   { path: 'andamento', component: AndamentoComponent }, //role admin
-  // { path: 'editar/:id', component:  }, //role admin
+  { path: 'editar/:id', component: ProjetoComponent }, //role admin
   // { path: '', component:  }, //role admin
 
   { path: '**', component: ProjetoComponent },

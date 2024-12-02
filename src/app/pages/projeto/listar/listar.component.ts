@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjetoService } from 'src/app/core/services/projeto.service';
 import { SecurityService } from 'src/app/core/services/security.service';
 declare var bootstrap: any;
@@ -22,7 +23,9 @@ export class ListarComponent implements OnInit {
   constructor(
     private projetoService: ProjetoService,
     private snackBar: MatSnackBar,
-    private authService: SecurityService
+    private authService: SecurityService,
+    private router: Router,
+    private activatedRoute :ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -50,6 +53,7 @@ export class ListarComponent implements OnInit {
   onAction(projeto: any, action: string): void {
     if (action === 'editar') {
       console.log('Editar projeto', projeto);
+      this.router.navigateByUrl(`/projetos/editar/${projeto.id}`);
     } else if (action === 'excluir') {
       console.log('Excluir projeto', projeto);
     }

@@ -9,11 +9,13 @@
             <input type="text" class="form-control" id="titulo" placeholder="Título" size="25" formControlName="titulo" />
             <label for="titulo">Título</label>
             <div *ngIf="campoInvalido('titulo')" class="container-error">
-            <span *ngIf="titulo.errors!['required']">É obrigatório.</span>
+                <span *ngIf="titulo.errors!['required']">É obrigatório.</span>
             </div>
         </div>
+    </div>
+    
         <!-- Etapas -->
-        <div class="etapas" formArrayName="etapas">
+        <div class="detalhe" formArrayName="etapas">
             <div class="alinhar titulo">
               <div><h2>Etapas</h2></div>
                <button class="buttonNovo" type="button" (click)="addEtapas()">
@@ -27,7 +29,7 @@
                         <div class="form-group" style="display: flex; align-items: flex-end;">
                             <div class="col-sm-10">                                
                                 <label for="nomeEtapa">Nome Etapa</label>
-                                <input type="text" class="form-control" id="nomeEtapa" placeholder="Etapa" size="25" formControlName="nomeEtapa">
+                                <input type="text" class="form-control" id="nomeEtapa" size="25" formControlName="nomeEtapa">
                                 <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
                                     <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
                                 </div>
@@ -41,7 +43,7 @@
                         </div>
 
                         <!-- Detalhe perguntas -->
-                        <div class="etapas" formArrayName="perguntas">
+                        <div class="detalhe" formArrayName="perguntas">
                             <div class="alinhar titulo">
                                 <div><h2>Perguntas</h2></div>
                                 <button class="buttonNovo" type="button" (click)="addPerguntas(indexEtapa)">
@@ -54,7 +56,7 @@
                                         <div class="col-sm-10" >
                                             <input type="hidden" id="idPergunta" formControlName="idPergunta">
                                             <label for="descricaoPergunta">Descricao Pergunta</label>
-                                            <input type="text" class="form-control" id="descricaoPergunta" placeholder="Etapa" size="25" formControlName="descricaoPergunta">
+                                            <input type="text" class="form-control" id="descricaoPergunta" size="25" formControlName="descricaoPergunta">
                                             <!-- <div *ngIf="campoInvalido('nomeEtapa')" class="container-error">
                                                 <span *ngIf="getNomeEtapa(indexEtapa).errors!['required']">É obrigatório.</span>
                                             </div> -->
@@ -62,7 +64,7 @@
                                         <div class="col-sm-2">
                                             <button class="buttonNovo" type="button" 
                                                 (click)="carregarPerguntas(); togglePergunta(); 
-                                                    indexEtapaAtual = indexEtapa; indexPerguntaAtual = indexPergunta">
+                                                indexEtapaAtual = indexEtapa; indexPerguntaAtual = indexPergunta">
                                                 Reutilizar
                                             </button>
                                         </div>
@@ -80,7 +82,7 @@
                                         <!-- </div> -->
                                     </div>
                                     <div class="form-group" *ngIf="getTipoPergunta(indexEtapa, indexPergunta).value == 'MULTIPLA_ESCOLHA'">
-                                        <div class="etapas" formArrayName="opcoesResposta">
+                                        <div class="detalhe" formArrayName="opcoesResposta">
                                             <div class="alinhar titulo">
                                                 <div><h2>Opções resposta</h2></div>
                                                 <button class="buttonNovo" type="button" (click)="addOpcaoResposta(indexEtapa, indexPergunta)">
@@ -108,7 +110,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    
 
     <botao-acao styleId="btnSalvar" 
         (executaAcaoEvent)="gravarDados()" 
