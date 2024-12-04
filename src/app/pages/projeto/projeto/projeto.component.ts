@@ -43,9 +43,9 @@ export class ProjetoComponent {
   }
 
   ngOnInit() {
-    this.createForm();
     this.modoEditar = this.router.url.includes('editar');
     console.log(this.modoEditar)
+    this.createForm();
 
     this.subscription = this.activatedRoute.params.subscribe(params => {
       if (params["id"]) {
@@ -65,14 +65,14 @@ export class ProjetoComponent {
         this.builder.group({
           "idEtapa":    this.builder.control(''),
           "nomeEtapa":  this.builder.control('', [Validators.required]),
-          "perguntas":  this.builder.array([
+          "perguntas":  this.builder.array(!this.modoEditar ? [
             this.builder.group({
               "idPergunta": this.builder.control(''),
               "descricaoPergunta": this.builder.control('', [Validators.required]),
               "tipoPergunta": this.builder.control('', [Validators.required]),
               "opcoesResposta": this.builder.array([])
             })
-          ])
+          ] : [])
         })
       ])
     });
@@ -108,7 +108,7 @@ export class ProjetoComponent {
         
                   this.getOpcoesResposta(indexEtapa, indexPergunta)[indexOpcao].patchValue({
                     "idResposta": opcao.id,
-                    "opcaoResposta": opcao.resposta
+                    "descricao": opcao.resposta
                   })
                 });
               }
@@ -134,7 +134,10 @@ export class ProjetoComponent {
     const newPergunta = this.builder.group({
       idPergunta: this.builder.control(''),
       descricaoPergunta: this.builder.control('', [Validators.required]),
-      tipoPergunta: this.builder.control('', [Validators.required]),
+      tipoPergunta: this.builder.control(
+        {value: '', disabled: this.modoEditar}, 
+        [Validators.required]
+      ),
       opcoesResposta: this.builder.array([]),
     });
     return this.getPerguntas(indexEtapa).push(newPergunta);
@@ -143,7 +146,7 @@ export class ProjetoComponent {
   public addOpcaoResposta(indexEtapa: any, indexPergunta: any) {
     const newOpcao = this.builder.group({
       idResposta: this.builder.control(''),
-      opcaoResposta: this.builder.control('')
+      descricao: this.builder.control('')
     });
     return this.getOpcoesResposta(indexEtapa, indexPergunta).push(newOpcao);
   }
@@ -165,16 +168,16 @@ export class ProjetoComponent {
       etapas: this.etapas.map((etapa, indexEtapa) => {
         return {
           id: etapa.get('idEtapa')?.value, // Certifique-se de que este ID não é nulo aqui
-          nomeEtapa: etapa.get('nomeEtapa')?.value,
+          titulo: etapa.get('nomeEtapa')?.value,
           perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
             return {
               id: pergunta.get('idPergunta')?.value, // Certifique-se de que este ID não é nulo aqui
               descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
-              tipoPergunta: pergunta.get('tipoPergunta')?.value,
+              //tipoPergunta: pergunta.get('tipoPergunta')?.value,
               opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
                 return {
-                  idResposta: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
-                  opcaoResposta: opcao.get('opcaoResposta')?.value,
+                  id: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
+                  descricao: opcao.get('descricao')?.value,
                 };
               }),
             };
@@ -194,47 +197,44 @@ export class ProjetoComponent {
       },
     });
   }
-  
-  
-  
 
-  private atualizarEtapas() {
-    if(!this.id) return;
+  // private atualizarEtapas() {
+  //   if(!this.id) return;
 
-    this.etapas.map((etapa :FormGroup, indexEtapa :number) => {
+  //   this.etapas.map((etapa :FormGroup, indexEtapa :number) => {
 
-      this.etapaService.save({
-        "id": etapa.get('idEtapa')?.value,
-        "titulo": etapa.get('nomeEtapa')?.value
-      }) .subscribe({
-        next: () => {
-          this.atualizarPerguntas(indexEtapa)
-        }
-      });
-    });
-  }
+  //     this.etapaService.save({
+  //       "id": etapa.get('idEtapa')?.value,
+  //       "titulo": etapa.get('nomeEtapa')?.value
+  //     }) .subscribe({
+  //       next: () => {
+  //         this.atualizarPerguntas(indexEtapa)
+  //       }
+  //     });
+  //   });
+  // }
 
-  private atualizarPerguntas( indexEtapa:number) {
-    this.getPerguntas(indexEtapa).map((pergunta:any, indexPergunta :number) => {
-      this.perguntaService.save({
-        "id": pergunta.get('idPergunta')?.value,
-        "descricaoPergunta": pergunta.get('descricaoPergunta')?.value
-      }).subscribe({
-        next: () => {
-          this.atualizarOpcoesResposta(indexEtapa, indexPergunta)
-        }
-      })
-    })
-  }
+  // private atualizarPerguntas( indexEtapa:number) {
+  //   this.getPerguntas(indexEtapa).map((pergunta:any, indexPergunta :number) => {
+  //     this.perguntaService.save({
+  //       "id": pergunta.get('idPergunta')?.value,
+  //       "descricaoPergunta": pergunta.get('descricaoPergunta')?.value
+  //     }).subscribe({
+  //       next: () => {
+  //         this.atualizarOpcoesResposta(indexEtapa, indexPergunta)
+  //       }
+  //     })
+  //   })
+  // }
 
-  private atualizarOpcoesResposta(indexEtapa:number, indexPergunta:number) {
-    this.getOpcoesResposta(indexEtapa, indexPergunta).map((resposta) => {
-      this.perguntaService.updateOpcaoResposta({
-        "opcaoRespostaId": resposta.get('idResposta')?.value,
-        "opcaoResposta": resposta.get('opcaoResposta')?.value
-      }).subscribe()
-    })
-  }
+  // private atualizarOpcoesResposta(indexEtapa:number, indexPergunta:number) {
+  //   this.getOpcoesResposta(indexEtapa, indexPergunta).map((resposta) => {
+  //     this.perguntaService.updateOpcaoResposta({
+  //       "opcaoRespostaId": resposta.get('idResposta')?.value,
+  //       "descricao": resposta.get('descricao')?.value
+  //     }).subscribe()
+  //   })
+  // }
 
   carregarEtapas() {
     this.subscription = this.etapaService.getAll()
@@ -284,7 +284,7 @@ export class ProjetoComponent {
   
           this.getOpcoesResposta(this.indexEtapaAtual, indexPergunta)[indexOpcao].patchValue({
             idResposta: opcao.id, // Indica que foi reutilizado
-            opcaoResposta: opcao.resposta,
+            descricao: opcao.resposta,
           });
         });
       }
@@ -309,7 +309,7 @@ export class ProjetoComponent {
   
         this.getOpcoesResposta(this.indexEtapaAtual, this.indexPerguntaAtual)[indexOpcao].patchValue({
           idResposta: opcao.id, // Indica que foi reutilizado
-          opcaoResposta: opcao.resposta,
+          descricao: opcao.resposta,
         });
       });
     }

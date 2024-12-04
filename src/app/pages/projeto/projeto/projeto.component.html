@@ -71,7 +71,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="tipoPergunta">Tipo Pergunta</label>
-                                        <select class="form-select" id="tipoPergunta" aria-label="Posto Serviço" formControlName="tipoPergunta">
+                                        <select class="form-select" id="tipoPergunta" aria-label="Posto Serviço" formControlName="tipoPergunta" [attr.disabled]="modoEditar">
                                             <option value="">Selecione...</option>
                                             <option value="STRING">TEXTO</option>
                                             <option value="MULTIPLA_ESCOLHA">MULTIPLA ESCOLHA</option>
@@ -93,8 +93,8 @@
                                                 <input type="hidden" id="idResposta" formControlName="idResposta">
                                                 <div class="container">
                                                     <div class="form-group">
-                                                        <label for="opcaoResposta">Opção</label>
-                                                        <input type="text" class="form-control" id="opcaoResposta" placeholder="Opção" size="50" formControlName="opcaoResposta">
+                                                        <label for="descricao">Opção</label>
+                                                        <input type="text" class="form-control" id="descricao" placeholder="Opção" size="50" formControlName="descricao">
                                                         <!-- <div *ngIf="campoInvalido('descricaoProjeto')" class="container-error">
                                                             <span *ngIf="descricaoProjeto.errors!['required']">É obrigatório.</span>
                                                         </div> -->
