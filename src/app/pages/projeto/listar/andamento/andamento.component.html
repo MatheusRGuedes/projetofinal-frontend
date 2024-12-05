@@ -54,6 +54,7 @@
           class="form-select"
           [(ngModel)]="usuarioSelecionado"
         >
+          <option value=""></option>
           <option *ngFor="let usuario of usuariosVinculados" [value]="usuario.id">
             {{ usuario.nome }}
           </option>

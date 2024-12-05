@@ -166,23 +166,43 @@ export class ProjetoComponent {
       id: this.id || null,
       titulo: this.titulo.value,
       etapas: this.etapas.map((etapa, indexEtapa) => {
-        return {
-          id: etapa.get('idEtapa')?.value, // Certifique-se de que este ID não é nulo aqui
-          titulo: etapa.get('nomeEtapa')?.value,
-          perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
-            return {
-              id: pergunta.get('idPergunta')?.value, // Certifique-se de que este ID não é nulo aqui
-              descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
-              //tipoPergunta: pergunta.get('tipoPergunta')?.value,
-              opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
-                return {
-                  id: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
-                  descricao: opcao.get('descricao')?.value,
-                };
-              }),
-            };
-          }),
-        };
+        if (this.modoEditar) { //edição
+          return {
+            id: etapa.get('idEtapa')?.value, // Certifique-se de que este ID não é nulo aqui
+            titulo: etapa.get('nomeEtapa')?.value,
+            perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
+              return {
+                id: pergunta.get('idPergunta')?.value, // Certifique-se de que este ID não é nulo aqui
+                descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
+                tipoPergunta: pergunta.get('tipoPergunta')?.value,
+                opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
+                  return {
+                    id: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
+                    descricao: opcao.get('descricao')?.value,
+                  };
+                }),
+              };
+            }),
+          };
+        } else { //gravação
+          return {
+            id: etapa.get('idEtapa')?.value, // Certifique-se de que este ID não é nulo aqui
+            nomeEtapa: etapa.get('nomeEtapa')?.value,
+            perguntas: this.getPerguntas(indexEtapa).map((pergunta, indexPergunta) => {
+              return {
+                id: pergunta.get('idPergunta')?.value, // Certifique-se de que este ID não é nulo aqui
+                descricaoPergunta: pergunta.get('descricaoPergunta')?.value,
+                tipoPergunta: pergunta.get('tipoPergunta')?.value,
+                opcoesResposta: this.getOpcoesResposta(indexEtapa, indexPergunta).map((opcao) => {
+                  return {
+                    id: opcao.get('idResposta')?.value, // Certifique-se de que este ID não é nulo aqui
+                    opcaoResposta: opcao.get('descricao')?.value,
+                  };
+                }),
+              };
+            }),
+          };
+        }
       }),
     };
   
