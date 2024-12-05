@@ -1,51 +1,50 @@
 <div class="projeto-container">
-    <div *ngFor="let etapa of projeto?.etapas" class="etapa-card">
-      <h2>{{ projeto.tituloProjeto }}</h2>
-  
-      <div *ngFor="let pergunta of etapa.perguntas" class="pergunta-card">
-        <p><strong>Descrição:</strong> {{ pergunta.descricaoPergunta }}</p>
-        <p><strong>Tipo:</strong> {{ pergunta.tipoPergunta }}</p>
-  
-        <div *ngIf="pergunta.tipoPergunta === 'Texto'">
-          <label for="resposta-texto-{{ pergunta.idPergunta }}">Resposta:</label>
-          <input
-            type="text"
-            id="resposta-texto-{{ pergunta.idPergunta }}"
-            [(ngModel)]="pergunta.resposta"
-            [disabled]="pergunta.respondida" 
-          />
-        </div>
-  
-        <div *ngIf="pergunta.tipoPergunta === 'Numérico'">
-          <label for="resposta-numero-{{ pergunta.idPergunta }}">Resposta:</label>
-          <input
-            type="number"
-            id="resposta-numero-{{ pergunta.idPergunta }}"
-            [(ngModel)]="pergunta.resposta"
-            [disabled]="pergunta.respondida" 
-          />
-        </div>
-  
-        <div *ngIf="pergunta.tipoPergunta === 'Múltipla Escolha'">
-          <label for="resposta-escolha-{{ pergunta.idPergunta }}">Resposta:</label>
-          <select
-            id="resposta-escolha-{{ pergunta.idPergunta }}"
-            [(ngModel)]="pergunta.resposta"
-            [disabled]="pergunta.respondida" 
-          >
-            <option *ngFor="let opcao of pergunta.opcoesResposta" [value]="opcao.id">
-              {{ opcao.resposta }}
-            </option>
-          </select>
-        </div>
-  
-        <button
-          (click)="enviarResposta(etapa.idEtapa, pergunta)"
-          [disabled]="pergunta.respondida"
-        >
-          Enviar Resposta
-        </button>
+  <div *ngFor="let etapa of projeto?.etapas" class="etapa-card">
+    <h2>{{ projeto.tituloProjeto }}</h2>
+
+    <div *ngFor="let pergunta of etapa.perguntas; let i = index" class="pergunta-card">
+      <p><strong>Descrição:</strong> {{ pergunta.descricaoPergunta }}</p>
+      <p><strong>Tipo:</strong> {{ pergunta.tipoPergunta }}</p>
+
+      <div *ngIf="pergunta.tipoPergunta === 'Texto'">
+        <label for="resposta-texto-{{ pergunta.idPergunta }}">Resposta:</label>
+        <input
+          type="text"
+          id="resposta-texto-{{ pergunta.idPergunta }}"
+          [(ngModel)]="pergunta.resposta"
+          [disabled]="pergunta.respondida || !perguntaPermitida(i)"
+        />
       </div>
+
+      <div *ngIf="pergunta.tipoPergunta === 'Numérico'">
+        <label for="resposta-numero-{{ pergunta.idPergunta }}">Resposta:</label>
+        <input
+          type="number"
+          id="resposta-numero-{{ pergunta.idPergunta }}"
+          [(ngModel)]="pergunta.resposta"
+          [disabled]="pergunta.respondida || !perguntaPermitida(i)"
+        />
+      </div>
+
+      <div *ngIf="pergunta.tipoPergunta === 'Múltipla Escolha'">
+        <label for="resposta-escolha-{{ pergunta.idPergunta }}">Resposta:</label>
+        <select
+          id="resposta-escolha-{{ pergunta.idPergunta }}"
+          [(ngModel)]="pergunta.resposta"
+          [disabled]="pergunta.respondida || !perguntaPermitida(i)"
+        >
+          <option *ngFor="let opcao of pergunta.opcoesResposta" [value]="opcao.id">
+            {{ opcao.resposta }}
+          </option>
+        </select>
+      </div>
+
+      <button
+        (click)="enviarResposta(etapa.idEtapa, pergunta)"
+        [disabled]="pergunta.respondida || !perguntaPermitida(i)"
+      >
+        Enviar Resposta
+      </button>
     </div>
   </div>
-  
+</div>

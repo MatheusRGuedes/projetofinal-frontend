@@ -24,12 +24,11 @@ export class ResponderComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: { [key: string]: any }) => {
-      if( params && params['id'] && params['idUsuario'] ) {
+      if (params && params['id'] && params['idUsuario']) {
         this.projetoId = +params['id'];
         const idUsuario = +params['idUsuario'];
         this.buscarProjeto(this.projetoId, idUsuario);
-      }
-      else if (params && params['id']) {
+      } else if (params && params['id']) {
         this.projetoId = +params['id'];
         this.buscarProjeto(this.projetoId);
       } else {
@@ -37,9 +36,9 @@ export class ResponderComponent implements OnInit {
       }
     });
   }
-  
+
   buscarProjeto(id: number, idUsuario?: number): void {
-    if(id && idUsuario) {
+    if (id && idUsuario) {
       this.projetoService.listarPorIdeIdUsuario(id, idUsuario).subscribe({
         next: (response) => {
           this.projeto = response;
@@ -65,7 +64,6 @@ export class ResponderComponent implements OnInit {
       this.projetoService.listarPorId(id).subscribe({
         next: (projeto) => {
           this.projeto = projeto;
-  
           this.projeto.etapas.forEach((etapa: any) => {
             etapa.perguntas.forEach((pergunta: any) => {
               if (pergunta.tipoPergunta === 'Múltipla Escolha' && pergunta.respondida) {
@@ -89,6 +87,17 @@ export class ResponderComponent implements OnInit {
     }
   }
 
+  perguntaPermitida(index: number): boolean {
+    if (index === 0) {
+      return true;
+    }
+
+    const perguntaAnterior = this.projeto.etapas
+      .flatMap((etapa: any) => etapa.perguntas)
+      [index - 1];
+    return perguntaAnterior && perguntaAnterior.respondida;
+  }
+
   enviarResposta(etapaId: number, pergunta: any): void {
     console.log('Enviando resposta para a pergunta:', etapaId);
     const respostaDTO: any = {
@@ -98,23 +107,23 @@ export class ResponderComponent implements OnInit {
       usuarioLogin: this.security.usuarioLogado.login,
       resposta: pergunta.tipoPergunta === 'Texto' ? pergunta.resposta : null,
       idOpcaoResposta: pergunta.tipoPergunta === 'Múltipla Escolha' ? pergunta.resposta : null,
-      respostaNumerica: pergunta.tipoPergunta === 'Numérico' ? pergunta.resposta : null
+      respostaNumerica: pergunta.tipoPergunta === 'Numérico' ? pergunta.resposta : null,
     };
-    
+
     this.perguntaService.responderPergunta(respostaDTO).subscribe({
       next: (response) => {
         console.log(`Resposta enviada com sucesso para o projeto ${this.projetoId}:`, response);
         this.snackBar.open('Resposta enviada com sucesso!', 'Fechar', {
-          duration: 3000
+          duration: 3000,
         });
         this.ngOnInit();
       },
       error: (err) => {
         console.error(`Erro ao enviar resposta para o projeto ${this.projetoId}:`, err);
         this.snackBar.open('Erro ao enviar resposta.', 'Fechar', {
-          duration: 3000
+          duration: 3000,
         });
-      }
+      },
     });
   }
 }
